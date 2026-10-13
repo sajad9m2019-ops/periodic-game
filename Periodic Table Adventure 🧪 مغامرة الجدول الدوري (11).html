@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Periodic Table Adventure 🧪 مغامرة الجدول الدوري</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#e8f5f1;--bg2:#cfeee6;--panel:#ffffff;--panel2:#eff8f5;--ink:#14243a;--muted:#587178;--accent:#0b9a88;--accent2:#6a4df0;--good:#119a56;--bad:#dc3a42;--warn:#e8920c;--line:#c3dbd5;--sh:0 6px 18px rgba(20,36,58,.12);--on:#fff;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0e24;--bg2:#17205a;--panel:#141b3c;--panel2:#1c2552;--ink:#e9efff;--muted:#a3b2dc;--accent:#2fd9c2;--accent2:#a592ff;--good:#41df8a;--bad:#ff6c75;--warn:#ffbe4a;--line:#2d3a73;--sh:0 8px 22px rgba(0,0,0,.45);--on:#07122b}}
+:root[data-theme="dark"]{--bg:#0a0e24;--bg2:#17205a;--panel:#141b3c;--panel2:#1c2552;--ink:#e9efff;--muted:#a3b2dc;--accent:#2fd9c2;--accent2:#a592ff;--good:#41df8a;--bad:#ff6c75;--warn:#ffbe4a;--line:#2d3a73;--sh:0 8px 22px rgba(0,0,0,.45);--on:#07122b}
+html{scroll-padding-top:env(safe-area-inset-top,0px);min-height:100%}
+html,body{margin:0}
+body{font-family:'Cairo','Segoe UI',Tahoma,sans-serif;background:radial-gradient(900px 520px at 85% -8%,var(--bg2),transparent 70%),var(--bg);background-attachment:fixed;color:var(--ink);min-height:100vh;overflow-x:hidden;line-height:1.6;font-size:16px}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3,p{margin:0}
+.hidden{display:none!important}
+#bgat{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+#bgat i{position:absolute;border-radius:50%;border:2px solid var(--accent);opacity:.12;animation:flt 14s ease-in-out infinite}
+@keyframes flt{50%{transform:translate(18px,-26px) scale(1.08)}}
+#top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--line)}
+#top .pg{flex:1;height:10px;background:var(--panel2);border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+#top .pg i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s}
+.ib{border:1px solid var(--line);background:var(--panel2);border-radius:12px;padding:4px 10px;font-weight:800;font-size:.9rem}
+.xpc{font-weight:800;color:var(--warn);font-size:.9rem;white-space:nowrap}
+#app{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:12px 12px 130px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:var(--sh);margin-bottom:12px}
+h2{font-size:1.25rem;font-weight:800}h2 small{font-size:.8rem;color:var(--muted);font-weight:600;direction:ltr;display:inline-block}
+h3{font-size:1.05rem;font-weight:800;margin-bottom:6px}
+.mini{font-size:.85rem;color:var(--muted)}
+.btn{border:0;border-radius:14px;padding:10px 16px;background:var(--accent);color:var(--on);font-weight:800;box-shadow:0 3px 0 rgba(0,0,0,.2);transition:transform .08s}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.big{font-size:1.45rem;padding:16px 38px;border-radius:22px;background:linear-gradient(135deg,var(--accent2),var(--accent));animation:pls 2s infinite}
+.btn[disabled]{opacity:.4;pointer-events:none}
+@keyframes pls{50%{transform:scale(1.05)}}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.pill{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:2px 12px;font-size:.8rem;font-weight:700}
+.zhead{display:flex;justify-content:space-between;align-items:center;font-size:1.15rem;font-weight:800;margin:4px 2px 10px}
+.task{font-size:.98rem;margin-bottom:8px}
+.fb{margin-top:10px;min-height:46px;border-radius:14px;padding:10px 12px;background:var(--panel2);border:1px dashed var(--line);font-size:.92rem}
+.fb.good{border:2px solid var(--good)}.fb.bad{border:2px solid var(--bad)}.fb.warn{border:2px solid var(--warn)}.fb.hint{border:2px solid var(--accent2)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px}
+.tab{flex:0 0 auto;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-weight:700;font-size:.85rem}
+.tab.on{background:var(--accent2);color:var(--on);border-color:var(--accent2)}.tab.lock{opacity:.4}
+.tr{margin:6px 0 0;padding:0 18px;font-size:.92rem}.tr li{margin-bottom:3px}
+.chip{border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:3px 12px;font-weight:800}
+.chip.on{background:var(--accent);color:var(--on)}
+/* hero */
+.hero{text-align:center;padding:26px 8px 10px;position:relative;z-index:1;max-width:760px;margin:0 auto}
+.hero h1{font-size:clamp(1.9rem,8vw,3.1rem);font-weight:800;line-height:1.15;direction:ltr;background:linear-gradient(90deg,var(--accent2),var(--accent),var(--warn));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:10px auto 16px;max-width:30em;color:var(--muted)}
+.mini-pt{display:grid;grid-template-columns:repeat(18,1fr);gap:2px;direction:ltr;margin:14px 6px}
+.mini-pt b{aspect-ratio:1;border-radius:3px;font-size:clamp(5px,1.6vw,10px);display:grid;place-items:center;color:#fff;font-weight:800;animation:hue 3.6s ease-in-out infinite;animation-delay:calc(var(--i)*70ms)}
+.mini-pt u{aspect-ratio:1}
+@keyframes hue{50%{filter:hue-rotate(110deg) brightness(1.25);transform:scale(1.12)}}
+/* periodic table */
+.scr{overflow-x:auto;padding-bottom:4px;direction:ltr}
+.tw{position:relative;min-width:560px;padding:18px 0 0 18px;direction:ltr}
+.pt{display:grid;grid-template-columns:repeat(18,minmax(26px,1fr));gap:2px}
+.cell{border:2px solid transparent;border-radius:5px;height:32px;padding:0;color:#fff;font-weight:800;font-size:.72rem;text-shadow:0 1px 2px rgba(0,0,0,.4);transition:transform .15s}
+.cell.sel{border-color:var(--ink);transform:scale(1.18);position:relative;z-index:2}
+.cell.sel2{border-color:var(--warn);transform:scale(1.18);position:relative;z-index:2}
+.gap{font-size:.62rem;color:var(--muted);display:grid;place-items:center}
+.ah{position:absolute;top:0;left:18px;right:0;height:14px;display:flex;align-items:center}
+.av{position:absolute;left:0;top:18px;bottom:0;width:14px;display:flex;flex-direction:column;align-items:center}
+.ah i{flex:1;height:5px;background:repeating-linear-gradient(90deg,var(--accent2) 0 10px,transparent 10px 18px);background-size:18px 5px;animation:flR .8s linear infinite}
+.ah.L i{animation-name:flL}
+.av i{flex:1;width:5px;background:repeating-linear-gradient(180deg,var(--accent2) 0 10px,transparent 10px 18px);background-size:5px 18px;animation:fdD .8s linear infinite}
+.av.U i{animation-name:fdU}
+@keyframes flR{to{background-position-x:18px}}@keyframes flL{to{background-position-x:-18px}}
+@keyframes fdD{to{background-position-y:18px}}@keyframes fdU{to{background-position-y:-18px}}
+.ah b,.av b{width:0;height:0;border:7px solid transparent;flex:none}
+.hr{border-left-color:var(--accent2)!important;border-right-width:0!important}.hl{border-right-color:var(--accent2)!important;border-left-width:0!important}
+.hd{border-top-color:var(--accent2)!important;border-bottom-width:0!important}.hu{border-bottom-color:var(--accent2)!important;border-top-width:0!important}
+.legend{display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--muted);margin-top:6px}
+.legend i{flex:1;height:8px;border-radius:6px;background:linear-gradient(90deg,hsl(230 75% 50%),hsl(130 75% 46%),hsl(30 75% 50%))}
+.info{margin-top:8px;padding:8px 10px;border-radius:12px;background:var(--panel2);font-size:.9rem;border:1px solid var(--line)}
+.dpad{display:grid;grid-template-columns:repeat(3,42px);grid-template-areas:". u ." "l . r" ". d .";gap:4px;direction:ltr}
+.dpad button{height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);font-weight:800}
+.dpad [data-d=U]{grid-area:u}.dpad [data-d=L]{grid-area:l}.dpad [data-d=R]{grid-area:r}.dpad [data-d=D]{grid-area:d}
+.stage{display:flex;gap:10px;align-items:center;justify-content:space-around;flex-wrap:wrap}
+.meter{height:14px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);overflow:hidden;margin:6px 0}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--warn));transition:width .8s}
+/* atoms */
+.atom{--px:62px;--h:200;width:var(--px);height:var(--px);border-radius:50%;display:grid;place-content:center;text-align:center;color:#fff;cursor:grab;user-select:none;touch-action:none;background:radial-gradient(circle at 32% 28%,hsl(var(--h) 85% 72%),hsl(var(--h) 70% 42%));box-shadow:0 5px 12px rgba(0,0,0,.25);position:relative;flex:none;transition:width .5s,height .5s}
+.atom b{font-size:calc(var(--px)*.34);line-height:1;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.atom small{font-size:calc(var(--px)*.17);line-height:1.1}
+.atom.sm small{display:none}
+.atom.sel{outline:4px solid var(--warn)}
+.atom.new{animation:grow .7s cubic-bezier(.3,1.6,.5,1)}
+.atom .sh{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.7rem;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:0 6px;white-space:nowrap}
+@keyframes grow{from{transform:scale(.4)}}
+.forest{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;padding:18px 8px 26px;border-radius:16px;min-height:100px;background:linear-gradient(180deg,rgba(60,170,90,.12),rgba(60,170,90,.28));border:1px solid var(--line)}
+.trail{display:flex;gap:6px;justify-content:center;align-items:flex-end;margin-top:12px;padding:10px 0 0;border-bottom:6px solid var(--good);border-radius:0 0 8px 8px}
+.slot{border:2px dashed var(--line);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:6px;position:relative;background:var(--panel2);flex:none}
+.slot .no{position:absolute;top:2px;right:6px;font-weight:800;color:var(--muted);font-size:.8rem}
+.slot em{font-size:.68rem;color:var(--muted);font-style:normal;margin-top:4px}
+.drop.over{outline:3px dashed var(--accent2);background:var(--panel)}
+.ghost{filter:drop-shadow(0 10px 12px rgba(0,0,0,.35));opacity:.95}
+.lifted{opacity:.25}
+.shake{animation:shk .45s}
+@keyframes shk{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.cmp{display:flex;gap:16px;justify-content:center;align-items:flex-end;margin:10px 0 14px}
+.cmp>div{text-align:center;font-size:.8rem}
+/* z2 */
+.bat{position:relative;height:30px;border-radius:10px;background:var(--panel2);border:2px solid var(--line);overflow:hidden;margin:8px 0}
+.bat i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--good),var(--warn));transition:width .7s}
+.bat span{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:.85rem;direction:ltr}
+.lamps{display:flex;gap:10px;justify-content:center;margin:10px 0}
+.lamp{flex:1;max-width:130px;text-align:center;border:2px dashed var(--line);border-radius:16px;padding:8px 4px;font-size:1.8rem;background:var(--panel2)}
+.lamp small{display:block;font-size:.7rem;color:var(--muted);line-height:1.2}
+.lamp.on{border:2px solid var(--warn);box-shadow:0 0 22px var(--warn);animation:pop .5s}
+@keyframes pop{from{transform:scale(.8)}}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;margin-top:10px}
+.acard{text-align:center;padding:14px 4px 6px;border-radius:16px;background:var(--panel2);border:1px solid var(--line);font-size:.8rem;cursor:pointer}
+.acard.used{opacity:.55}
+.nuc{position:relative;width:58px;height:58px;margin:0 auto 8px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;background:radial-gradient(circle at 32% 28%,hsl(var(--h) 85% 70%),hsl(var(--h) 70% 40%))}
+.orbit{position:absolute;inset:-12px;border:1px dashed var(--muted);border-radius:50%;animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.el{position:absolute;top:-7px;left:50%;margin-left:-7px;width:14px;height:14px;border-radius:50%;background:var(--warn);box-shadow:0 0 10px var(--warn);cursor:grab;touch-action:none}
+.el::after{content:'';position:absolute;inset:-20px}
+.el.free{position:relative;top:0;left:0;margin:0;display:inline-block}
+/* z3 */
+.socks{display:flex;gap:10px}
+.sock{flex:1;min-height:70px;border:2px dashed var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--panel2);position:relative;cursor:pointer}
+.sock b{font-size:1.4rem}.sock small{font-size:.75rem;color:var(--muted)}
+.sock .x{position:absolute;top:2px;left:4px;border:0;background:transparent;font-weight:800;color:var(--bad)}
+.bond{width:100%;max-height:170px;margin-top:6px}
+.bond .rope{stroke:var(--muted);stroke-width:5;stroke-dasharray:8 6}
+.bond .cloud{transition:transform .9s cubic-bezier(.4,1.3,.5,1),opacity .4s;transform-box:fill-box}
+.bond .cl{fill:var(--accent2);opacity:.45}
+.bond .ed{fill:var(--warn)}
+.bond text{font-family:inherit;font-weight:800;text-anchor:middle;fill:#fff;font-size:18px}
+.bond .dl{fill:var(--ink);font-size:16px}
+.bond circle.bA,.bond circle.bB{transition:r .4s}
+.escale{position:relative;height:26px;direction:ltr;margin:6px 6px 0;border-top:4px solid var(--line)}
+.escale i{position:absolute;top:-12px;width:20px;height:20px;border-radius:50%;margin-left:-10px;transition:left .6s}
+.escale .a{background:var(--accent)}.escale .b{background:var(--warn)}
+.escale span{position:absolute;top:10px;font-size:.7rem;color:var(--muted)}
+.binfo{margin-top:6px;font-size:.88rem;background:var(--panel2);border-radius:12px;padding:8px 10px;border:1px solid var(--line)}
+.bench{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px}
+.tok{--h:200;width:60px;padding:6px 2px;text-align:center;border-radius:14px;color:#fff;font-weight:800;cursor:grab;touch-action:none;user-select:none;background:linear-gradient(160deg,hsl(var(--h) 75% 55%),hsl(var(--h) 65% 38%));box-shadow:0 3px 8px rgba(0,0,0,.25)}
+.tok b{display:block;font-size:1.2rem;line-height:1.1}.tok small{font-size:.65rem;font-weight:600;display:block;line-height:1.2}
+.tok.sel{outline:4px solid var(--warn)}
+/* z4 */
+.beakers{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.beaker{border:2px solid var(--line);border-radius:6px 6px 18px 18px;padding:8px 2px;text-align:center;background:var(--panel2);font-weight:800;cursor:pointer;min-height:72px}
+.beaker small{display:block;font-weight:600;font-size:.7rem}
+.beaker.rel{background:linear-gradient(180deg,var(--panel2),rgba(30,200,120,.4));border-color:var(--good)}
+.beaker.rej{background:linear-gradient(180deg,var(--panel2),rgba(230,60,70,.35));border-color:var(--bad)}
+.esrc{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:16px;background:var(--panel2);border:2px solid var(--warn);font-weight:800;cursor:grab;touch-action:none;user-select:none}
+.gauge{flex:1;min-width:150px}
+.gl{height:16px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);overflow:hidden}
+.gl i{display:block;height:100%;animation:fillw .9s ease}
+@keyframes fillw{from{width:0}}
+.bins{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.bin{min-height:110px;border:2px dashed var(--line);border-radius:14px;padding:6px;font-size:.78rem;font-weight:700;background:var(--panel2);text-align:center}
+.bin .tok{display:inline-block;margin:2px;width:50px;cursor:default}
+.bars{display:flex;align-items:flex-end;gap:5px;height:150px;padding-top:6px;direction:ltr}
+.bar{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;cursor:pointer;font-size:.72rem}
+.bar i{width:72%;background:var(--accent);border-radius:6px 6px 0 0;transition:height .6s}
+.bar.hl i{background:var(--warn)}.bar.on i{background:var(--accent2)}
+.bar b{margin-top:3px}
+.orbs{display:flex;gap:10px;justify-content:center;direction:ltr;flex-wrap:wrap}
+.orbs>div{text-align:center;font-size:.72rem}
+.ob{display:inline-grid;place-items:center;width:30px;height:30px;border:2px solid var(--ink);margin:1px;font-weight:800;font-size:.85rem;border-radius:4px;letter-spacing:-2px}
+.opt{display:block;width:100%;text-align:right;margin-top:8px;padding:10px 12px;border-radius:14px;border:2px solid var(--line);background:var(--panel2);font-weight:600;font-size:.9rem}
+.opt.ok{border-color:var(--good)}.opt.no{border-color:var(--bad);opacity:.6}
+/* z5 */
+.gwrap{position:relative;direction:ltr;aspect-ratio:8/6;border-radius:14px;overflow:hidden;border:2px solid var(--line);transition:filter 1s}
+.tiles{position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(6,1fr)}
+.tile{display:grid;place-items:center;border:1px solid rgba(255,255,255,.08);background:linear-gradient(135deg,#34506c,#2a3f58);font-size:clamp(14px,4.4vw,26px);cursor:pointer;position:relative}
+.tile:nth-child(odd){background:linear-gradient(135deg,#2f4863,#26394f)}
+.tile.rock{background:#1b2535;cursor:not-allowed}
+.smp{--h:200;width:78%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;font-size:.62em;background:hsl(var(--h) 70% 48%);box-shadow:0 0 10px hsl(var(--h) 90% 60%);animation:pls 1.6s infinite}
+.stn{filter:grayscale(1)}.stn.lit{filter:none;animation:pop .6s}
+#robot{position:absolute;width:12.5%;height:16.6667%;display:grid;place-items:center;font-size:clamp(16px,5vw,30px);transition:left .15s,top .15s;pointer-events:none;z-index:3}
+.inv{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;min-height:36px}
+.inv .tok{width:50px;cursor:pointer}
+.tslot{min-height:56px;border:2px dashed var(--line);border-radius:14px;display:grid;place-items:center;color:var(--muted);margin:8px 0;font-weight:700}
+.seq{display:flex;gap:4px;flex-wrap:wrap;direction:rtl;min-height:44px;border:2px dashed var(--line);border-radius:14px;padding:4px}
+.seq .tok{width:46px;cursor:default}
+/* reactor */
+.core{height:120px;display:grid;place-items:center;position:relative;--g:0}
+.core .ring{position:absolute;border-radius:50%;border:4px solid var(--accent2);border-top-color:transparent;animation:spin calc(8s - var(--g)*1.4s) linear infinite}
+.core .r1{width:110px;height:110px}.core .r2{width:78px;height:78px;border-color:var(--warn);border-bottom-color:transparent;animation-direction:reverse}
+.core .nuc2{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:radial-gradient(circle,var(--warn),var(--bad));box-shadow:0 0 calc(8px + var(--g)*14px) var(--warn);filter:saturate(calc(.3 + var(--g)*.14));animation:flk 1s infinite}
+@keyframes flk{50%{opacity:.75}}
+.core.boom{animation:shk .5s}
+.core.up .nuc2{animation:none;box-shadow:0 0 60px var(--good);background:radial-gradient(circle,#fff,var(--good))}
+.mods{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.mod{border:2px solid var(--line);background:var(--panel2);border-radius:14px;padding:6px 2px;text-align:center;font-size:.7rem;line-height:1.2}
+.mod span{font-size:1.4rem;display:block}.mod b{display:block;font-size:1rem}
+.mod.act{border-color:var(--accent2)}.mod.ok{border-color:var(--good);background:var(--panel)}.mod.bad{border-color:var(--bad);animation:shk .45s}
+.cond{margin-top:10px;font-size:.9rem;padding:8px 10px;border-radius:12px;background:var(--panel2);border:1px solid var(--line)}
+/* map */
+.mapwrap{position:relative;height:470px;direction:ltr;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,var(--panel2),var(--panel))}
+.mapwrap svg{position:absolute;inset:0;width:100%;height:100%}
+.mpath{fill:none;stroke:var(--accent2);stroke-width:3;stroke-dasharray:2 2.4;vector-effect:non-scaling-stroke;opacity:.7}
+.node{position:absolute;transform:translate(-50%,-50%);width:78px;text-align:center;border:0;background:transparent;font-size:.72rem;font-weight:800;line-height:1.2;direction:rtl}
+.node span{display:grid;place-items:center;width:62px;height:62px;margin:0 auto 2px;border-radius:50%;font-size:1.9rem;background:var(--panel);border:3px solid var(--accent);box-shadow:var(--sh)}
+.node.open span{animation:pls 1.8s infinite}.node.done span{border-color:var(--good);background:var(--panel2)}
+.node.lock{opacity:.5}.node.lock span{border-color:var(--line);filter:grayscale(1)}
+/* misc */
+#mascot{position:fixed;z-index:40;right:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border:0;background:transparent;padding:0;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))}
+#mascot .e{transform-origin:30px 30px;animation:spin 4s linear infinite}
+#bubble{position:fixed;z-index:40;right:74px;bottom:calc(18px + env(safe-area-inset-bottom,0px));max-width:min(72vw,360px);background:var(--panel);border:2px solid var(--accent2);border-radius:16px;padding:8px 12px;font-size:.85rem;box-shadow:var(--sh);opacity:0;transform:translateY(8px);pointer-events:none;transition:.25s}
+#bubble.on{opacity:1;transform:none}
+#modal{position:fixed;inset:0;z-index:60;background:rgba(5,10,30,.6);display:grid;place-items:center;padding:16px}
+.mbox{background:var(--panel);border-radius:24px;padding:20px;max-width:430px;width:100%;text-align:center;box-shadow:var(--sh);border:2px solid var(--accent2);animation:pop .4s;max-height:90vh;overflow:auto}
+.mbox h2{margin-bottom:8px}.mbox p{margin-bottom:12px;color:var(--muted)}
+.xpf{position:fixed;z-index:70;left:50%;top:30%;transform:translateX(-50%);font-weight:800;font-size:1.5rem;color:var(--warn);animation:xp 1.3s forwards;pointer-events:none}
+@keyframes xp{to{transform:translate(-50%,-70px);opacity:0}}
+#toast{position:fixed;z-index:80;left:50%;top:70px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:12px;font-weight:700;font-size:.85rem;opacity:0;transition:.3s;pointer-events:none}
+#toast.on{opacity:1}
+.skills{list-style:none;padding:0;margin:8px 0;text-align:right}.skills li{padding:4px 0}
+.cf{position:fixed;top:-20px;z-index:65;font-size:1.4rem;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+button:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="bgat"></div>
+<header id="top" class="hidden">
+ <button class="ib" id="bMap" title="الخريطة">🗺</button>
+ <button class="ib" id="bLes" title="مراجعة الدروس">📖</button>
+ <div class="pg"><i id="pgi"></i></div>
+ <span class="xpc">⭐ <span id="xp">0</span> · م<span id="lv">1</span></span>
+ <button class="ib" id="bSnd" title="الصوت">🔊</button>
+</header>
+<main id="app"></main>
+<div id="bubble"></div>
+<button id="mascot" aria-label="اطلب تلميحًا من أتوم">
+ <svg viewBox="0 0 60 60"><g class="e"><ellipse cx="30" cy="30" rx="29" ry="11" fill="none" stroke="#ffb52e" stroke-width="2"/><circle cx="59" cy="30" r="3.2" fill="#ffb52e"/></g><circle cx="30" cy="30" r="20" fill="#6a4df0"/><circle cx="23" cy="27" r="4.2" fill="#fff"/><circle cx="37" cy="27" r="4.2" fill="#fff"/><circle cx="24" cy="28" r="2" fill="#14243a"/><circle cx="38" cy="28" r="2" fill="#14243a"/><path d="M22 36 Q30 43 38 36" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>
+</button>
+<div id="modal" class="hidden"></div>
+<div id="toast"></div>
+<script>
+'use strict';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const app=$('#app');
+let S={xp:0,done:{},lessonsDone:false,muted:false},cur='start',hintFn=null;
+try{const v=JSON.parse(localStorage.getItem('pta_v2')||'null');if(v)S=Object.assign(S,v)}catch(e){}
+const save=()=>{try{localStorage.setItem('pta_v2',JSON.stringify(S))}catch(e){}};
+const rnd=a=>[...a].sort(()=>Math.random()-.5);
+
+/* ===== البيانات: z|رمز|اسم|مجموعة|دورة|نصف قطر pm|طاقة تأين kJ/mol|كهروسالبية|ألفة إلكترونية (سالب = تُطلق طاقة) ===== */
+const RAW=`1|H|هيدروجين|1|1|53|1312|2.20|-73
+2|He|هيليوم|18|1|31|2372||21
+3|Li|ليثيوم|1|2|167|520|0.98|-60
+4|Be|بريليوم|2|2|112|900|1.57|0
+5|B|بورون|13|2|87|801|2.04|-27
+6|C|كربون|14|2|67|1086|2.55|-122
+7|N|نيتروجين|15|2|56|1402|3.04|7
+8|O|أكسجين|16|2|48|1314|3.44|-141
+9|F|فلور|17|2|42|1681|3.98|-328
+10|Ne|نيون|18|2|38|2081||29
+11|Na|صوديوم|1|3|190|496|0.93|-53
+12|Mg|مغنيسيوم|2|3|145|738|1.31|0
+13|Al|ألومنيوم|13|3|118|578|1.61|-42
+14|Si|سيليكون|14|3|111|787|1.90|-134
+15|P|فوسفور|15|3|98|1012|2.19|-72
+16|S|كبريت|16|3|88|1000|2.58|-200
+17|Cl|كلور|17|3|79|1251|3.16|-349
+18|Ar|أرغون|18|3|71|1521||35
+19|K|بوتاسيوم|1|4|243|419|0.82|-48
+20|Ca|كالسيوم|2|4|194|590|1.00|2
+31|Ga|غاليوم|13|4|136|579|1.81|-41
+32|Ge|جرمانيوم|14|4|125|762|2.01|-119
+33|As|زرنيخ|15|4|114|947|2.18|-78
+34|Se|سيلينيوم|16|4|103|941|2.55|-195
+35|Br|بروم|17|4|94|1140|2.96|-325
+36|Kr|كريبتون|18|4|88|1351||39
+37|Rb|روبيديوم|1|5|265|403|0.82|-47
+38|Sr|سترونشيوم|2|5|219|550|0.95|5
+49|In|إنديوم|13|5|156|558|1.78|-37
+50|Sn|قصدير|14|5|145|709|1.96|-107
+51|Sb|أنتيمون|15|5|133|834|2.05|-103
+52|Te|تيلوريوم|16|5|123|869|2.10|-190
+53|I|يود|17|5|115|1008|2.66|-295
+54|Xe|زينون|18|5|108|1170||41
+55|Cs|سيزيوم|1|6|298|376|0.79|-46
+56|Ba|باريوم|2|6|253|503|0.89|-14`;
+const E={},ELS=[],G={};
+RAW.trim().split('\n').forEach(l=>{const a=l.split('|');const e={z:+a[0],s:a[1],n:a[2],g:+a[3],p:+a[4],r:+a[5],ie:+a[6],en:a[7]===''?null:+a[7],ea:+a[8]};E[e.s]=e;ELS.push(e);(G[e.p]=G[e.p]||{})[e.g]=e});
+const CATH={alk:8,ae:34,met:205,mtd:165,nm:100,hal:285,ng:190};
+function cat(e){if(e.g==18)return'ng';if(e.g==17)return'hal';if(e.s=='H')return'nm';if(e.g==1)return'alk';if(e.g==2)return'ae';if(['B','Si','Ge','As','Sb','Te'].includes(e.s))return'mtd';if(['Al','Ga','In','Sn'].includes(e.s))return'met';return'nm'}
+const hue=e=>CATH[cat(e)];
+const kind=e=>{const c=cat(e);return['alk','ae','met'].includes(c)?'فلز':c=='mtd'?'شبه فلز':'لا فلز'};
+const PR={
+ r:{ar:'نصف القطر الذري',en:'Atomic Radius',ic:'⭕',get:e=>e.r,show:e=>e.r+' pm',a:'L',d:'D'},
+ ie:{ar:'طاقة التأين',en:'Ionization Energy',ic:'⚡',get:e=>e.ie,show:e=>e.ie+' kJ/mol',a:'R',d:'U'},
+ en:{ar:'الكهروسالبية',en:'Electronegativity',ic:'🧲',get:e=>e.en,show:e=>e.en==null?'— (غاز نبيل: لا يكوّن روابط عادةً)':e.en.toFixed(2),a:'R',d:'U'},
+ ea:{ar:'الألفة الإلكترونية',en:'Electron Affinity',ic:'🔬',get:e=>Math.max(0,-e.ea),show:e=>e.ea<0?'−'+(-e.ea)+' kJ/mol (تُطلق طاقة)':'≈ 0 أو موجبة (+'+e.ea+')',a:'R',d:'U'},
+ mc:{ar:'الصفة الفلزية',en:'Metallic Character',ic:'🔩',get:e=>e.en==null?null:(4-e.en)*25,show:e=>kind(e)+(e.en==null?' (خامل)':' · '+Math.round((4-e.en)*25)+'/100'),a:'L',d:'D'}
+};
+const KEYS=['r','ie','en','ea','mc'];
+KEYS.forEach(k=>{const v=ELS.map(PR[k].get).filter(x=>x!=null);PR[k].mn=Math.min(...v);PR[k].mx=Math.max(...v)});
+const val=(k,e)=>PR[k].get(e);
+function nb(e,d){const sg=(d=='L'||d=='U')?-1:1;
+ if(d=='L'||d=='R'){for(let g=e.g+sg;g>=1&&g<=18;g+=sg)if(G[e.p]&&G[e.p][g])return G[e.p][g]}
+ else{for(let p=e.p+sg;p>=1&&p<=6;p+=sg)if(G[p]&&G[p][e.g])return G[p][e.g]}
+ return null}
+
+/* ===== أدوات عامة ===== */
+let ac;
+function sfx(t){if(S.muted)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const M={good:[660,880],bad:[240,170],pick:[420],drop:[520],win:[523,659,784,1047],zap:[300,700]}[t]||[440];M.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain(),t0=ac.currentTime+i*.1;o.type=t=='bad'?'sawtooth':'sine';o.frequency.value=f;g.gain.setValueAtTime(.001,t0);g.gain.exponentialRampToValueAtTime(.12,t0+.02);g.gain.exponentialRampToValueAtTime(.001,t0+.16);o.connect(g);g.connect(ac.destination);o.start(t0);o.stop(t0+.18)})}catch(e){}}
+function say(t,ms=7000){const b=$('#bubble');b.innerHTML=t;b.classList.add('on');clearTimeout(say.t);say.t=setTimeout(()=>b.classList.remove('on'),ms)}
+function toast(t){const b=$('#toast');b.textContent=t;b.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>b.classList.remove('on'),1800)}
+function fb(h,c=''){const f=$('#fb');if(!f)return;f.className='fb '+c;f.innerHTML=h}
+function shake(n){if(!n)return;n.classList.remove('shake');void n.offsetWidth;n.classList.add('shake')}
+function prog(){return((S.lessonsDone?1:0)+Object.keys(S.done).length)/7}
+function updTop(){$('#xp').textContent=S.xp;$('#lv').textContent=Math.floor(S.xp/100)+1;$('#pgi').style.width=Math.round(prog()*100)+'%';$('#bSnd').textContent=S.muted?'🔇':'🔊'}
+function addXP(n){S.xp+=n;save();updTop();const f=document.createElement('div');f.className='xpf';f.textContent='+'+n+' XP ✨';document.body.appendChild(f);setTimeout(()=>f.remove(),1400)}
+function modal(h){const m=$('#modal');m.innerHTML='<div class="mbox">'+h+'</div>';m.classList.remove('hidden')}
+function closeModal(){$('#modal').classList.add('hidden')}
+function finish(key,xp,title,msg){const first=!S.done[key];S.done[key]=1;save();if(first)addXP(xp);sfx('win');confetti();updTop();
+ modal(`<h2>🎊 ${title}</h2><p>${msg}</p><div class="row" style="justify-content:center"><button class="btn" id="mb">${key=='rx'?'🌟 إلى النهاية':'🗺 العودة للخريطة'}</button></div>`);$('#mb').onclick=()=>go(key=='rx'?'win':'map')}
+function confetti(){for(let i=0;i<26;i++){const c=document.createElement('div');c.className='cf';c.textContent=['⚛️','✨','🧪','⭐','🔹'][i%5];c.style.left=Math.random()*100+'vw';c.style.animationDuration=(1.6+Math.random()*1.8)+'s';c.style.animationDelay=Math.random()*.5+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),4200)}}
+/* سحب وإفلات بالمؤشر — يعمل بالفأرة واللمس */
+function under(e){for(const n of document.elementsFromPoint(e.clientX,e.clientY)){const d=n.closest&&n.closest('.drop');if(d)return d}return null}
+function drag(node,data,o){
+ node.style.touchAction='none';
+ node.addEventListener('pointerdown',ev=>{
+  if(ev.button>0)return;ev.preventDefault();
+  const sx=ev.clientX,sy=ev.clientY,r=node.getBoundingClientRect(),ox=sx-r.left,oy=sy-r.top;let moved=false,gh=null;
+  const mv=e=>{
+   if(!moved&&Math.hypot(e.clientX-sx,e.clientY-sy)>7){moved=true;gh=node.cloneNode(true);gh.classList.add('ghost');gh.removeAttribute('id');
+    Object.assign(gh.style,{position:'fixed',left:'0',top:'0',width:r.width+'px',height:r.height+'px',margin:'0',zIndex:'999',pointerEvents:'none'});document.body.appendChild(gh);node.classList.add('lifted');sfx('pick')}
+   if(moved){gh.style.transform=`translate(${e.clientX-ox}px,${e.clientY-oy}px) scale(1.08)`;$$('.drop.over').forEach(x=>x.classList.remove('over'));const t=under(e);if(t)t.classList.add('over')}};
+  const up=e=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);
+   $$('.drop.over').forEach(x=>x.classList.remove('over'));node.classList.remove('lifted');
+   if(!moved){o.onTap&&o.onTap(data,node);return}
+   gh.remove();const t=e.type=='pointercancel'?null:under(e);if(t)o.onDrop&&o.onDrop(data,t);else o.onMiss&&o.onMiss(data)};
+  window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up)})}
+function bars(items,o={}){const mx=o.max||Math.max(...items.map(i=>Math.abs(i[1])));
+ return`<div class="bars">${items.map(([k,v,t])=>`<div class="bar ${(o.hl||[]).includes(k)?'hl':''} ${o.on===k?'on':''}" data-k="${k}"><small>${t==null?v:t}</small><i style="height:${Math.max(3,Math.abs(v)/mx*100*.78)}%"></i><b>${k}</b></div>`).join('')}</div>`}
+
+/* ===== الجدول الدوري ===== */
+function cellH(e,prop){let st;if(!prop)st=`background:hsl(${hue(e)} 55% 40%)`;else{const P=PR[prop],v=P.get(e);if(v==null)st='background:var(--panel2);color:var(--muted);text-shadow:none';else{const t=(v-P.mn)/(P.mx-P.mn||1);st=`background:hsl(${230-200*t} 75% ${44+6*(1-t)}%)`}}return`<button class="cell" data-s="${e.s}" style="${st}" title="${e.n}">${e.s}</button>`}
+function ptHTML(prop){let h='<div class="pt">';for(let p=1;p<=6;p++){let g=1;while(g<=18){const e=G[p]&&G[p][g];if(e){h+=cellH(e,prop);g++}else{let t=g;while(t<=18&&!(G[p]&&G[p][t]))t++;h+=`<div class="gap" style="grid-column:${g}/span ${t-g}">${(p==4||p==5)&&g==3?'فلزات انتقالية':''}</div>`;g=t}}}return h+'</div>'}
+function arrows(k){const a=PR[k].a,d=PR[k].d;
+ return`<div class="ah ${a}">${a=='R'?'<i></i><b class="hr"></b>':'<b class="hl"></b><i></i>'}</div><div class="av ${d}">${d=='D'?'<i></i><b class="hd"></b>':'<b class="hu"></b><i></i>'}</div>`}
+
+/* ===== الدروس ===== */
+const LESS={
+ r:{def:'<b>نصف القطر الذري</b> يصف حجم الذرة: المسافة التقريبية من النواة إلى أبعد إلكترونات في الغلاف الخارجي.',
+  tr:['↔ <b>عبر الدورة</b> (يسار ← يمين): يقل، لأن الشحنة النووية تزداد وتشدّ الإلكترونات نحو النواة.','↕ <b>نزولًا في المجموعة</b>: يزداد، لأن كل دورة جديدة تضيف غلافًا بعيدًا.','مثال: السيزيوم Cs من أكبر الذرات، والفلور F من أصغرها.']},
+ ie:{def:'<b>طاقة التأين الأولى</b> هي الطاقة اللازمة لنزع أضعف إلكترون ارتباطًا من ذرة غازية معزولة.',
+  tr:['↔ <b>عبر الدورة</b>: تزداد عمومًا (الإلكترون أقرب والجذب أقوى).','↕ <b>نزولًا في المجموعة</b>: تقل (الإلكترون الخارجي أبعد ويسهل نزعه).','⚠ استثناءات: Be أعلى من B، وN أعلى من O.']},
+ en:{def:'<b>الكهروسالبية</b> هي قدرة الذرة على جذب إلكترونات الرابطة الكيميائية نحوها داخل الجزيء.',
+  tr:['↔ <b>عبر الدورة</b>: تزداد.','↕ <b>نزولًا في المجموعة</b>: تقل.','الفلور F الأعلى (3.98) والسيزيوم Cs من الأقل. الغازات النبيلة لا تُعطى قيمة عادةً.','تختلف عن طاقة التأين: هذه لذرة معزولة، وتلك لذرة داخل رابطة.']},
+ ea:{def:'<b>الألفة الإلكترونية</b> هي التغير في الطاقة عند اكتساب ذرة غازية إلكترونًا. القيمة السالبة تعني أن الطاقة <b>تُطلق</b>.',
+  tr:['اتجاه عام: تُطلق طاقة أكبر نحو اليمين وللأعلى.','⚠ <b>استثناءات كثيرة</b>: Be وMg وN وNe وAr لا ترحّب بإلكترون جديد.','⚠ وكلور Cl أكبر من فلور F، لأن F صغيرة جدًا فيزداد التنافر.']},
+ mc:{def:'<b>الصفة الفلزية</b> هي ميل العنصر لفقد الإلكترونات وإظهار خواص الفلزات: لمعان، توصيل جيد، وقابلية للطرق.',
+  tr:['↔ <b>عبر الدورة</b>: تقل (من فلز إلى لا فلز).','↕ <b>نزولًا في المجموعة</b>: تزداد.','أشباه الفلزات (B, Si, Ge, As, Sb, Te) على الحد الفاصل.']}
+};
+const WHY={
+ r:{D:'نزلنا في المجموعة ⇒ أُضيف غلاف جديد ⇒ الذرة أكبر.',U:'صعدنا ⇒ غلاف أقل ⇒ الذرة أصغر.',R:'عدد الأغلفة ثابت لكن الشحنة النووية زادت ⇒ تقترب الإلكترونات من النواة ⇒ الذرة أصغر.',L:'شحنة نووية أقل ⇒ جذب أضعف ⇒ الذرة أكبر.'},
+ ie:{R:'شحنة نووية فعّالة أكبر ونصف قطر أصغر ⇒ الإلكترون أشد ارتباطًا ⇒ طاقة أكبر.',L:'جذب أضعف ⇒ نزع أسهل ⇒ طاقة أقل.',D:'الإلكترون الخارجي أبعد ومحجوب بأغلفة أكثر ⇒ ينتزع بسهولة ⇒ طاقة أقل.',U:'الإلكترون أقرب للنواة ⇒ نزعه أصعب ⇒ طاقة أكبر.'},
+ en:{R:'شحنة نووية فعّالة أكبر ⇒ جذب أقوى لإلكترونات الرابطة.',L:'جذب أضعف لإلكترونات الرابطة.',D:'الإلكترونات بعيدة عن النواة ⇒ جذب أضعف.',U:'ذرة أصغر ⇒ تجذب إلكترونات الرابطة بقوة أكبر.'},
+ ea:{R:'اتجاه عام: تميل الذرة أكثر لاكتساب الإلكترون فتُطلق طاقة أكبر.',L:'ميل أقل لاكتساب الإلكترون.',D:'الإلكترون الجديد يدخل غلافًا أبعد ⇒ طاقة أقل تُطلق (في الغالب).',U:'الإلكترون الجديد أقرب للنواة ⇒ طاقة أكبر (في الغالب).'},
+ mc:{R:'تتمسك الذرة بإلكتروناتها أكثر ⇒ الصفة الفلزية تقل.',L:'تفقد الذرة إلكتروناتها بسهولة أكبر ⇒ الصفة الفلزية تزداد.',D:'الإلكترون الخارجي أبعد ⇒ يسهل فقده ⇒ الصفة الفلزية تزداد.',U:'فقد الإلكترون أصعب ⇒ الصفة الفلزية تقل.'}
+};
+const IEX={Be:'Be (2s² ممتلئ) أعلى من B: إلكترون B الخارجي في 2p أبعد قليلًا ومحجوب بـ 2s.',B:'⚠ استثناء: B أقل من Be لأن إلكترونه الخارجي في 2p أعلى طاقة ومحجوب بـ 2s.',N:'N أعلى من O: غلاف 2p نصف ممتلئ مستقر.',O:'⚠ استثناء: O أقل من N، فالإلكترونات المزدوجة في 2p تتنافر فيسهل نزع أحدها.',Mg:'Mg (3s² ممتلئ) مستقر فطاقته أعلى من Al.',Al:'⚠ استثناء: Al أقل من Mg لأن إلكترونه الخارجي في 3p أعلى طاقة ومحجوب بـ 3s.',P:'P (3p³ نصف ممتلئ) مستقر فطاقته أعلى من S.',S:'⚠ استثناء: S أقل من P، فالإلكترونات المزدوجة في 3p تتنافر فيسهل نزع أحدها.'};
+const EAX={Be:'الغلاف 2s ممتلئ، والإلكترون الجديد سيدخل 2p الأعلى طاقة ⇒ لا يميل لاكتسابه.',Mg:'الغلاف 3s ممتلئ ⇒ لا يميل لاكتساب إلكترون.',N:'غلاف 2p نصف ممتلئ مستقر؛ الإلكترون الجديد سيُزاوَج ويتنافر ⇒ لا تُطلق طاقة.',Ne:'غازات نبيلة: غلاف ممتلئ تمامًا ⇒ يرفض إلكترونًا إضافيًا.',Ar:'غلاف ممتلئ تمامًا ⇒ يرفض إلكترونًا إضافيًا.',He:'غلاف ممتلئ ⇒ يرفض إلكترونًا إضافيًا.',Ca:'غلاف 4s ممتلئ ⇒ لا يميل لاكتساب إلكترون.',Kr:'غاز نبيل: غلاف ممتلئ.',Xe:'غاز نبيل: غلاف ممتلئ.',Sr:'غلاف s ممتلئ ⇒ لا يميل لاكتساب إلكترون.',F:'⚠ F تُطلق أقل من Cl رغم أنها أصغر: في الحيز الصغير يتنافر الإلكترون الجديد مع إلكترونات كثيفة.',Cl:'أعلى ألفة إلكترونية في الجدول: ذرة أكبر قليلًا من F فيقل التنافر.'};
+const GN={r:'الأغلفة',ie:'',en:'',ea:'',mc:''};
+
+/* ===== شاشة البداية ===== */
+function start(){
+ cur='start';
+ let cells='',i=0;for(let p=1;p<=6;p++)for(let g=1;g<=18;g++){const e=G[p]&&G[p][g];cells+=e?`<b style="--i:${i++};background:hsl(${hue(e)} 62% 46%)">${e.s}</b>`:'<u></u>'}
+ app.innerHTML=`<div class="hero"><div style="font-size:3rem">🧪⚛️</div><h1>Periodic Table Adventure</h1><h2 style="margin-top:6px">مغامرة الجدول الدوري</h2>
+ <div class="mini-pt">${cells}</div>
+ <p>حدث خلل في عالم العناصر: تغيّرت اتجاهات الخصائص واختفت الطاقة. تعلّم الاتجاهات الدورية أولًا، ثم استكشف خمس مناطق وأعد تشغيل المفاعل!</p>
+ <button class="btn big" id="go">ابدأ المغامرة ⚔️</button>
+ ${S.lessonsDone?'<div class="row" style="justify-content:center;margin-top:14px"><button class="btn ghost" id="cont">▶ متابعة من الخريطة</button><button class="btn ghost" id="rst">↺ تقدّم جديد</button></div>':''}
+ <div class="row" style="justify-content:center;margin-top:10px"><button class="ib" id="snd2">${S.muted?'🔇 الصوت مكتوم':'🔊 الصوت يعمل'}</button></div></div>`;
+ $('#go').onclick=()=>{sfx('good');if(S.lessonsDone)go('map');else{modal(`<h2>📜 القصة</h2><p>اختلّت اتجاهات الخصائص الدورية في عالم العناصر، وانطفأ مفاعل الجدول الدوري. لن تنقذه بالتخمين؛ تحتاج أن تفهم <b>كيف تتغير الخصائص</b> في الجدول.<br>ابدأ بخمسة دروس قصيرة وجرّب كل مفهوم بنفسك.</p><button class="btn" id="mb">هيا نتعلّم 📖</button>`);$('#mb').onclick=()=>{closeModal();L.i=0;go('lessons')}}};
+ if($('#cont'))$('#cont').onclick=()=>go('map');
+ if($('#rst'))$('#rst').onclick=()=>{S={xp:0,done:{},lessonsDone:false,muted:S.muted};save();start()};
+ $('#snd2').onclick=()=>{S.muted=!S.muted;save();start()};
+ say('أنا <b>أتوم</b> ⚛️ — اضغط عليّ في أي وقت لتحصل على تلميح!',5000);
+}
+
+/* ===== شاشة الدروس ===== */
+let L={i:0,sel:'Na',sel2:'Cl',pick:0,lab:false,cnt:{},seen:{0:1},prev:null,mv:null};
+function lessonsGo(){lessons(L.i)}
+function lessons(i){
+ L.i=i;L.seen[i]=1;L.lab=false;L.mv=null;L.prev=null;cur='lessons';
+ const k=KEYS[i],P=PR[k],T=LESS[k];
+ const need=!S.lessonsDone&&(L.cnt[k]||0)<2;
+ app.innerHTML=`<div class="tabs">${KEYS.map((q,j)=>`<button class="tab ${j==i?'on':''} ${!S.lessonsDone&&!L.seen[j]?'lock':''}" data-i="${j}">${PR[q].ic} ${PR[q].ar}</button>`).join('')}</div>
+ <div class="card"><h2>${P.ic} ${P.ar} <small>${P.en}</small></h2><p style="margin-top:6px">${T.def}</p><ul class="tr">${T.tr.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+ <div class="card"><div class="mini" style="margin-bottom:6px">🗺 الجدول خريطة تفاعلية: اضغط أي عنصر. الأسهم المتحركة تشير إلى اتجاه <b>الزيادة</b>.</div>
+ <div class="scr"><div class="tw">${arrows(k)}${ptHTML(k)}</div></div>
+ <div class="legend"><span>أقل</span><i></i><span>أعلى</span></div>
+ <div class="info" id="info"></div>
+ <div class="row"><span class="mini">أمثلة:</span>${['Na','Cl','F','Cs'].map(s=>`<button class="chip" data-ex="${s}">${s}</button>`).join('')}</div></div>
+ <div class="row"><button class="btn" id="tryB">🧪 جرّب بنفسك</button></div>
+ <div id="lab" class="card hidden"></div>
+ <div class="row" style="justify-content:space-between;margin-top:14px"><button class="btn ghost" id="prev" ${i==0?'disabled':''}>‹ السابق</button><button class="btn" id="next" ${need?'disabled':''}>${i==4?'ابدأ المغامرة ⚔️':'الدرس التالي ›'}</button></div>
+ <p class="mini" id="nh" style="text-align:center;margin-top:6px">${need?'🔒 جرّب التجربة (تفاعلان على الأقل) لفتح الدرس التالي':''}</p>`;
+ $$('.tab').forEach(t=>t.onclick=()=>{const j=+t.dataset.i;if(!S.lessonsDone&&!L.seen[j])return toast('أكمل الدرس الحالي أولًا 🔒');lessons(j)});
+ $$('.cell').forEach(c=>c.onclick=()=>pickEl(c.dataset.s));
+ $$('[data-ex]').forEach(c=>c.onclick=()=>pickEl(c.dataset.ex));
+ $('#tryB').onclick=()=>{L.lab=!L.lab;$('#lab').classList.toggle('hidden',!L.lab);if(L.lab){labInit(k);$('#lab').scrollIntoView({behavior:'smooth',block:'nearest'})}};
+ $('#prev').onclick=()=>lessons(i-1);
+ $('#next').onclick=()=>{if(i<4)lessons(i+1);else{if(!S.lessonsDone){S.lessonsDone=true;save();addXP(30)}sfx('win');say('ممتاز! أنت جاهز. اختر المنطقة الأولى 🌳');go('map')}};
+ hintFn=()=>say(`جرّب زر <b>🧪 جرّب بنفسك</b>، ثم اضغط عناصر مختلفة من الجدول وراقب كيف تتغير القيمة مع الأسهم.`);
+ refreshInfo();
+}
+function pickEl(s){
+ const k=KEYS[L.i];
+ if(k=='en'){if(L.pick==0)L.sel=s;else L.sel2=s;L.prev=null;L.mv=null;L.pick=1-L.pick}
+ else{const a=E[L.sel];L.prev=a;L.mv=null;L.sel=s}
+ sfx('drop');refreshInfo();if(L.lab)labUpd(k,true)}
+function refreshInfo(){const k=KEYS[L.i],e=E[L.sel];
+ $$('.cell').forEach(c=>{c.classList.toggle('sel',c.dataset.s==L.sel);c.classList.toggle('sel2',k=='en'&&c.dataset.s==L.sel2)});
+ $('#info').innerHTML=`<b>${e.n} (${e.s})</b> — Z=${e.z} · المجموعة ${e.g} · الدورة ${e.p}<br>${PR[k].ar}: <b>${PR[k].show(e)}</b>${k=='en'?`<br><b>${E[L.sel2].n} (${L.sel2})</b>: ${PR.en.show(E[L.sel2])}`:''}`}
+function bump(k){L.cnt[k]=(L.cnt[k]||0)+1;if(L.cnt[k]>=2){const n=$('#next');if(n)n.disabled=false;const h=$('#nh');if(h)h.textContent='✅ أحسنت! يمكنك المتابعة'}else{const h=$('#nh');if(h&&!S.lessonsDone)h.textContent='🔒 تفاعل واحد آخر على الأقل...'}}
+function mvTo(d){const k=KEYS[L.i];const cs=(k=='en'&&L.pick==1)?'sel2':'sel';const key=(k=='en'&&L.pick==1)?'sel2':'sel';
+ const n=nb(E[L[key]],d);if(!n){toast('لا يوجد عنصر في هذا الاتجاه');return}
+ L.prev=E[L[key]];L.mv=d;L[key]=n.s;sfx('drop');refreshInfo();labUpd(k,true)}
+const dpad='<div class="dpad"><button data-d="U">▲</button><button data-d="L">◀</button><button data-d="R">▶</button><button data-d="D">▼</button></div>';
+const dpadDir=d=>d; /* الأسهم تتحرك في الجدول كما يُرى (يسار/يمين) */
+
+/* --- المختبرات --- */
+function labInit(k){
+ const lab=$('#lab');
+ const H={
+  r:()=>`<h3>🔬 مجهر الذرات</h3><p class="mini">استخدم الأسهم أو اضغط عنصرًا في الجدول. الدائرة المنقّطة هي حجم العنصر السابق.</p>
+  <div class="stage"><svg viewBox="0 0 240 240" width="230" height="230"><circle id="gh" cx="120" cy="120" r="0" fill="none" stroke="var(--muted)" stroke-dasharray="5 5"/><g id="ag" style="transform-origin:120px 120px;transition:transform .7s cubic-bezier(.3,1.4,.5,1)"><circle id="ac" cx="120" cy="120" r="110" fill="hsl(200 70% 55%)" fill-opacity=".35" stroke="hsl(200 70% 45%)" stroke-width="3"/><g id="rings"></g></g><circle cx="120" cy="120" r="7" fill="var(--bad)"/></svg>${dpad}</div><div id="lt" class="info"></div>`,
+  ie:()=>`<h3>⚡ جهاز نزع الإلكترون</h3><p class="mini">اسحب الإلكترون 🟡 إلى جامع الطاقة (أو اضغط عليه) لتعرف الطاقة اللازمة.</p>
+  <div class="stage"><div style="text-align:center"><div class="nuc" id="inuc" style="width:70px;height:70px;margin-bottom:14px"><span id="isym"></span><span class="orbit" id="iorb"><i class="el" id="iel"></i></span></div></div>
+  <div class="drop" id="coll" style="width:120px;padding:8px;border:2px dashed var(--line);border-radius:14px;text-align:center">🔋 جامع الطاقة<div class="meter"><i id="ifill" style="width:0"></i></div><small id="ival">—</small></div>${dpad}</div><div id="lt" class="info"></div>`,
+  en:()=>`<h3>🧲 مختبر الرابطة</h3><p class="mini">اضغط عنصرًا من الجدول لاختيار الذرة المحددة، وبدّل بين الخانتين، وشاهد الإلكترونات تتحرك.</p>
+  <div class="row"><button class="chip" data-pk="0">الذرة 1: <b id="p0"></b></button><button class="chip" data-pk="1">الذرة 2: <b id="p1"></b></button><button class="chip" id="swp">⇄ تبديل</button></div>${bondHTML()}<div class="escale"><i class="mk a"></i><i class="mk b"></i><span style="left:0">0</span><span style="left:50%">2</span><span style="right:0">4</span></div><div id="lt" class="info" style="margin-top:12px"></div><div class="row">${dpad}</div>`,
+  ea:()=>`<h3>🔬 غرفة اكتساب الإلكترون</h3><p class="mini">اسحب الإلكترون 🟡 إلى الذرة (أو اضغط عليه) وانظر هل تُطلق طاقة أم ترفضه.</p>
+  <div class="stage"><div class="esrc" id="esrc"><i class="el free"></i> e⁻</div><div class="drop" id="tgt" style="text-align:center"><div class="nuc" id="enuc" style="width:76px;height:76px"><span id="esym"></span></div></div>${dpad}</div>
+  <div class="meter"><i id="efill" style="width:0"></i></div><div id="lt" class="info"></div>`,
+  mc:()=>`<h3>🔩 كاشف الفلزات</h3><p class="mini">اختر عنصرًا واكتشف هل هو فلز أم شبه فلز أم لا فلز.</p>
+  <div class="stage"><div class="nuc" id="mnuc" style="width:76px;height:76px"><span id="msym"></span></div><div style="flex:1;min-width:160px"><div id="mk" style="font-weight:800;font-size:1.1rem"></div><small>الصفة الفلزية</small><div class="meter"><i id="mm" style="width:0"></i></div><small>لمعان</small><div class="meter"><i id="m1" style="width:0"></i></div><small>توصيل كهربائي</small><div class="meter"><i id="m2" style="width:0"></i></div><small>قابلية الطرق</small><div class="meter"><i id="m3" style="width:0"></i></div></div>${dpad}</div><div id="lt" class="info"></div>`
+ };
+ lab.innerHTML=H[k]();
+ $$('#lab .dpad button').forEach(b=>b.onclick=()=>mvTo(b.dataset.d));
+ if(k=='ie'){const act=()=>ieRemove();drag($('#iel'),null,{onDrop:act,onTap:act})}
+ if(k=='ea'){const act=()=>eaFire();drag($('#esrc'),null,{onDrop:act,onTap:act})}
+ if(k=='en'){$$('[data-pk]').forEach(b=>b.onclick=()=>{L.pick=+b.dataset.pk;labUpd('en',false)});$('#swp').onclick=()=>{[L.sel,L.sel2]=[L.sel2,L.sel];refreshInfo();labUpd('en',true)}}
+ labUpd(k,false);
+}
+function labUpd(k,act){
+ const e=E[L.sel],why=L.mv&&WHY[k][L.mv]?'<br>💡 '+WHY[k][L.mv]:'';
+ if(k=='r'){const s=e.r/298,ac=$('#ac');$('#ag').style.transform=`scale(${s})`;ac.setAttribute('fill',`hsl(${hue(e)} 70% 55%)`);ac.setAttribute('stroke',`hsl(${hue(e)} 70% 40%)`);
+  let rg='';for(let i=1;i<=e.p;i++)rg+=`<circle cx="120" cy="120" r="${110*i/e.p-(i==e.p?2:0)}" fill="none" stroke="var(--ink)" stroke-opacity=".5" stroke-width="2" vector-effect="non-scaling-stroke" ${i==e.p?'stroke-dasharray="1 0"':''}/>`;$('#rings').innerHTML=rg;
+  $('#gh').setAttribute('r',L.prev?110*L.prev.r/298:0);
+  $('#lt').innerHTML=`<b>${e.n}</b>: نصف القطر <b>${e.r} pm</b> · عدد الأغلفة <b>${e.p}</b> · Z = <b>${e.z}</b>${L.prev?`<br>السابق ${L.prev.s}: ${L.prev.r} pm ← ${e.r>L.prev.r?'🔼 أكبر':e.r<L.prev.r?'🔽 أصغر':'نفسه'}`:''}${why||'<br>💡 عدد الأغلفة = رقم الدورة.'}`}
+ if(k=='ie'){$('#isym').textContent=e.s;$('#inuc').style.background=`radial-gradient(circle at 32% 28%,hsl(${hue(e)} 85% 70%),hsl(${hue(e)} 70% 40%))`;$('#iel').style.display='';$('#ifill').style.width='0';$('#ival').textContent='—';
+  $('#lt').innerHTML=`<b>${e.n}</b>: اسحب الإلكترون الخارجي لتعرف الطاقة. ${why}`}
+ if(k=='en'){const A=E[L.sel],B=E[L.sel2];$('#p0').textContent=A.s;$('#p1').textContent=B.s;$$('[data-pk]').forEach(b=>b.classList.toggle('on',+b.dataset.pk==L.pick));
+  const r=bondUpd($('#lab'),A,B);
+  $('#lt').innerHTML=r?`ΔEN = <b>${r.d.toFixed(2)}</b> ⇒ رابطة <b>${r.t}</b>.<br>الإلكترونات أقرب إلى <b>${r.hi.n}</b> (${r.hi.en.toFixed(2)}).${why}`:'اختر ذرتين لهما قيمة كهروسالبية (الغازات النبيلة لا تكوّن روابط عادةً).';
+  if(act&&r)bump('en')}
+ if(k=='ea'){$('#esym').textContent=e.s;$('#enuc').style.background=`radial-gradient(circle at 32% 28%,hsl(${hue(e)} 85% 70%),hsl(${hue(e)} 70% 40%))`;$('#efill').style.width='0';$('#lt').innerHTML=`<b>${e.n}</b>: أطلق الإلكترون نحو الذرة. ${why}`}
+ if(k=='mc'){const sc=e.en==null?0:(4-e.en)*25,kd=kind(e),P=kd=='فلز'?[92,95,90]:kd=='شبه فلز'?[60,45,12]:[8,2,4];
+  $('#msym').textContent=e.s;$('#mnuc').style.background=`radial-gradient(circle at 32% 28%,hsl(${hue(e)} 85% 70%),hsl(${hue(e)} 70% 40%))`;$('#mk').textContent=kd;
+  $('#mm').style.width=sc+'%';$('#m1').style.width=P[0]+'%';$('#m2').style.width=P[1]+'%';$('#m3').style.width=P[2]+'%';
+  $('#lt').innerHTML=`<b>${e.n}</b> ${e.en==null?'غاز نبيل خامل.':'درجة الصفة الفلزية '+Math.round(sc)+'/100.'}${why}`;}
+ if(act&&(k=='r'||k=='mc'))bump(k)}
+function ieRemove(){const e=E[L.sel];sfx('zap');$('#iel').style.display='none';$('#ifill').style.width=Math.min(100,e.ie/2100*100)+'%';$('#ival').textContent=e.ie+' kJ/mol';
+ const pv=L.prev?`<br>السابق ${L.prev.s}: ${L.prev.ie} ← ${e.ie>L.prev.ie?'🔼 أعلى':'🔽 أقل'}`:'';
+ $('#lt').innerHTML=`نزع الإلكترون الأول من <b>${e.n}</b> يحتاج <b>${e.ie} kJ/mol</b>.${pv}${IEX[e.s]?'<br>'+IEX[e.s]:(L.mv?'<br>💡 '+WHY.ie[L.mv]:'')}`;bump('ie')}
+function eaFire(){const e=E[L.sel],f=$('#efill');sfx(e.ea<0?'good':'bad');
+ if(e.ea<0){f.style.background='linear-gradient(90deg,var(--good),var(--warn))';f.style.width=Math.min(100,-e.ea/350*100)+'%';$('#enuc').style.boxShadow='0 0 28px var(--warn)'}
+ else{f.style.background='var(--bad)';f.style.width='100%';shake($('#enuc'))}
+ $('#lt').innerHTML=`<b>${e.n}</b>: ${e.ea<0?'تُطلق <b>'+(-e.ea)+' kJ/mol</b> ✨':'<b>لا ترحّب</b> بالإلكترون (≈ 0 أو موجبة، +'+e.ea+')'}.${EAX[e.s]?'<br>'+EAX[e.s]:(L.mv?'<br>💡 '+WHY.ea[L.mv]:'')}`;bump('ea')}
+
+/* --- رابطة (تُستخدم في الدرس والمنطقة 3) --- */
+function bondHTML(){return`<svg class="bond" viewBox="0 0 360 150"><line class="rope" x1="80" x2="280" y1="75" y2="75"/><circle class="bA" cx="80" cy="75" r="30"/><circle class="bB" cx="280" cy="75" r="30"/><g class="cloud" style="opacity:.3"><ellipse class="cl" cx="180" cy="75" rx="62" ry="28"/><circle class="ed" cx="165" cy="75" r="5"/><circle class="ed" cx="195" cy="75" r="5"/></g><text class="tA" x="80" y="82">؟</text><text class="tB" x="280" y="82">؟</text><text class="dl dA" x="80" y="26"></text><text class="dl dB" x="280" y="26"></text></svg>`}
+function btype(d){return d<0.4?{k:'np',t:'تساهمية غير قطبية (Nonpolar covalent)'}:d<=1.7?{k:'p',t:'تساهمية قطبية (Polar covalent)'}:{k:'i',t:'أيونية (Ionic)'}}
+function bondUpd(rt,A,B){const q=s=>$(s,rt);
+ const ra=a=>a?Math.round(20+a.r*.1):26;
+ [['bA',A],['bB',B]].forEach(([c,a])=>{const n=q('.'+c);n.setAttribute('r',ra(a));n.style.fill=a?`hsl(${hue(a)} 70% 50%)`:'var(--panel2)'});
+ q('.tA').textContent=A?A.s:'؟';q('.tB').textContent=B?B.s:'؟';
+ const cl=q('.cloud'),mk=$$('.escale .mk',rt);
+ if(mk.length){mk[0].style.left=(A&&A.en!=null?A.en/4*100:-10)+'%';mk[1].style.left=(B&&B.en!=null?B.en/4*100:-10)+'%'}
+ if(!A||!B||A.en==null||B.en==null){cl.style.opacity=.15;q('.dA').textContent='';q('.dB').textContent='';return null}
+ const d=Math.abs(A.en-B.en),dir=B.en>A.en?1:-1,t=btype(d),hi=B.en>=A.en?B:A;
+ const sh=d<.05?0:Math.min(100,18+d/3*82)*dir;cl.style.opacity=1;cl.style.transform=`translateX(${sh}px)`;
+ const hiA=A.en>B.en;
+ q('.dA').textContent=t.k=='np'?'':t.k=='p'?(hiA?'δ−':'δ+'):(hiA?'−':'+');q('.dB').textContent=t.k=='np'?'':t.k=='p'?(hiA?'δ+':'δ−'):(hiA?'+':'−');
+ return{d,t:t.t,hi,k:t.k}}
+
+/* ===== الخريطة ===== */
+const ZN=[{k:'z1',ic:'🌳',n:'غابة الذرات العملاقة',x:78,y:88},{k:'z2',ic:'⚡',n:'محطة الطاقة الإلكترونية',x:24,y:72},{k:'z3',ic:'🧲',n:'مغناطيس الكهروسالبية',x:76,y:55},{k:'z4',ic:'🔬',n:'مختبر الإلكترونات الغامضة',x:24,y:39},{k:'z5',ic:'🏁',n:'سباق استعادة العناصر',x:76,y:24},{k:'rx',ic:'☢️',n:'المفاعل النهائي',x:50,y:8}];
+function unlocked(i){if(i==0)return true;if(i<5)return!!S.done[ZN[i-1].k];return ZN.slice(0,5).every(z=>S.done[z.k])}
+function map(){cur='map';
+ app.innerHTML=`<div class="zhead"><span>🗺 خريطة عالم العناصر</span><span class="pill">${Object.keys(S.done).length}/6 مناطق</span></div>
+ <div class="mapwrap"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path class="mpath" d="M78 88 Q50 82 24 72 Q50 64 76 55 Q50 47 24 39 Q50 31 76 24 Q64 12 50 8"/></svg>
+ ${ZN.map((z,i)=>`<button class="node ${S.done[z.k]?'done':unlocked(i)?'open':'lock'}" data-k="${z.k}" data-i="${i}" style="left:${z.x}%;top:${z.y}%"><span>${S.done[z.k]?'✅':unlocked(i)?z.ic:'🔒'}</span>${z.n}</button>`).join('')}</div>
+ <div class="row" style="justify-content:center;margin-top:12px"><button class="btn ghost" id="rv">📖 مراجعة الدروس</button><button class="btn ghost" id="hm">🏠 الشاشة الرئيسية</button></div>`;
+ $$('.node').forEach(n=>n.onclick=()=>{const i=+n.dataset.i;if(!unlocked(i)){sfx('bad');return toast(i<5?'أكمل المنطقة السابقة لفتح هذه المنطقة 🔒':'أنجز المناطق الخمس أولًا 🔒')}go(n.dataset.k)});
+ $('#rv').onclick=()=>{L.i=0;go('lessons')};$('#hm').onclick=()=>go('start');
+ hintFn=()=>say('اضغط على المنطقة المضيئة 🌟 لتبدأ. تُفتح المناطق واحدة بعد الأخرى.');
+}
+
+/* ================= المنطقة 1: غابة الذرات العملاقة ================= */
+const Z1R=[
+ {t:'المجموعة 1 (الفلزات القلوية)',e:['Li','Na','K'],g:1,note:'نزولًا في المجموعة تُضاف أغلفة: Li (غلافان) ثم Na (3) ثم K (4) ⇒ يزداد نصف القطر.'},
+ {t:'المجموعة 17 (الهالوجينات)',e:['F','Cl','Br','I'],g:1,note:'القاعدة نفسها في كل مجموعة: كل غلاف جديد يُبعد الإلكترونات الخارجية عن النواة.'},
+ {t:'المجموعة 2 (القلويات الترابية)',e:['Be','Mg','Ca','Sr','Ba'],g:1,note:'من Be إلى Ba يزداد عدد الأغلفة من 2 إلى 6 ⇒ ذرات أكبر وأكبر.'},
+ {t:'الدورة 3 (من Na إلى Cl)',e:['Na','Mg','Si','S','Cl'],g:0,note:'تحدٍّ معكوس! في الدورة الواحدة عدد الأغلفة ثابت (3) لكن الشحنة النووية تزداد فتنكمش الذرة: Cl أصغر وNa أكبر.'}];
+let Z1;
+function z1(){z1s(0)}
+function z1s(r){const R=Z1R[r],ans=[...R.e].sort((a,b)=>E[a].r-E[b].r);let pool;do{pool=rnd(R.e)}while(pool.join()==ans.join());
+ Z1={r,ans,slots:Array(ans.length).fill(null),pool,hand:null,hint:0,wrong:0,fresh:-1,done:false};hintFn=z1hint;z1draw();
+ say(r==0?'اسحب كل ذرة إلى درج الغابة. عند وضعها في مكانها الصحيح سيظهر حجمها الحقيقي! 🌳':'جولة جديدة! فكّر في الاتجاه قبل أن تسحب.')}
+function z1draw(){
+ const R=Z1R[Z1.r],n=Z1.ans.length,W=Math.min(app.clientWidth||360,740)-30;
+ const maxPx=Math.max(40,Math.min(90,Math.floor((W-6*(n-1))/n)-14)),rmax=Math.max(...Z1.ans.map(s=>E[s].r));
+ const px=s=>Math.round(maxPx*E[s].r/rmax);
+ const atom=(s,placed,extra='')=>{const e=E[s],sz=placed?px(s):62;
+  const bd=!placed&&Z1.hint>=2?`<i class="sh">${R.g?e.p+' أغلفة':'Z = '+e.z}</i>`:'';
+  return`<div class="atom ${sz<54?'sm':''} ${extra}" data-s="${s}" style="--px:${sz}px;--h:${hue(e)}"><b>${s}</b><small>${e.n}</small>${bd}</div>`};
+ app.innerHTML=`<div class="zhead"><span>🌳 غابة الذرات العملاقة</span><span class="pill">الجولة ${Z1.r+1}/4</span></div>
+ <div class="card"><p class="task">رتّب ذرات <b>${R.t}</b> من <b>الأصغر</b> إلى <b>الأكبر</b>: اسحب الذرة إلى درج الغابة (أو اضغطها ثم اضغط الخانة).</p>
+ <div class="forest">${Z1.pool.length?Z1.pool.map(s=>atom(s,false,Z1.hand==s?'sel':'')).join(''):'<span class="mini">🌲 كل الذرات في أماكنها</span>'}</div>
+ <div class="trail">${Z1.slots.map((s,i)=>`<div class="slot drop" data-i="${i}" style="width:${maxPx+14}px;height:${maxPx+36}px;margin-bottom:${i*8}px"><span class="no">${i+1}</span>${s?atom(s,true,Z1.fresh==i?'new':'').replace('cursor:grab','')+`<em>${E[s].r} pm</em>`:`<em>${i==0?'الأصغر':i==n-1?'الأكبر':''}</em>`}</div>`).join('')}</div>
+ <div id="fb" class="fb">${Z1.hand?'اختر الخانة المناسبة للذرة المحددة 👆':'ابدأ بسحب أي ذرة…'}</div>
+ <div class="row"><button class="btn ghost" id="hb">💡 تلميح (${Z1.hint}/3)</button><button class="btn ghost" id="rs">↺ إعادة الجولة</button></div></div>`;
+ $$('.forest .atom').forEach(a=>drag(a,a.dataset.s,{onDrop:(s,t)=>{if(t.classList.contains('slot'))z1place(s,+t.dataset.i)},onTap:s=>{Z1.hand=Z1.hand==s?null:s;z1draw()}}));
+ $$('.slot').forEach(s=>s.onclick=()=>{if(Z1.hand)z1place(Z1.hand,+s.dataset.i)});
+ $('#hb').onclick=z1hint;$('#rs').onclick=()=>z1s(Z1.r);
+}
+function z1place(s,i){
+ if(Z1.done)return;
+ if(Z1.slots[i]){shake($$('.slot')[i]);fb('هذه الخانة مشغولة. اختر خانة فارغة.','warn');return}
+ Z1.hand=null;const rank=Z1.ans.indexOf(s),e=E[s];
+ if(rank===i){Z1.slots[i]=s;Z1.pool=Z1.pool.filter(x=>x!==s);Z1.fresh=i;sfx('good');addXP(10);z1draw();
+  fb(`✅ <b>${e.n} (${s})</b>: نصف القطر ${e.r} pm، وعدد الأغلفة ${e.p}. كبرت الذرة لحجمها الحقيقي!`,'good');
+  if(!Z1.pool.length)z1done()}
+ else{Z1.wrong++;sfx('bad');z1draw();shake($$('.slot')[i]);fb(z1wrong(s,i),'bad')}}
+function z1wrong(s,i){const e=E[s];let pt=null;
+ Z1.slots.forEach((t,j)=>{if(t&&!pt){const f=E[t];if((j<i&&f.r>e.r)||(j>i&&f.r<e.r))pt=t}});
+ const cmp=(a,b)=>{const m=Math.max(E[a].r,E[b].r),sz=x=>Math.round(74*E[x].r/m);return`<div class="cmp">${[a,b].map(x=>`<div><div class="atom ${sz(x)<54?'sm':''}" style="--px:${sz(x)}px;--h:${hue(E[x])};cursor:default;margin:auto"><b>${x}</b></div>${E[x].r} pm<br>${E[x].p} أغلفة</div>`).join('')}</div>`};
+ if(pt){const f=E[pt];return`❌ ليست هذه الخانة! قارن حجم <b>${s}</b> مع <b>${pt}</b> (موضوعة قبل قليل):${cmp(s,pt)}`+(e.p!==f.p?`عدد الأغلفة: ${s}=${e.p} و${pt}=${f.p}. أيهما أكبر إذن؟ 🤔`:`عدد الأغلفة متساوٍ (${e.p}) لكن الشحنة النووية مختلفة (Z: ${s}=${e.z}، ${pt}=${f.z}). ماذا تفعل الشحنة الأكبر بالإلكترونات؟ 🤔`)}
+ return`❌ ليس مكانها بعد. لدى <b>${e.n}</b> ${e.p} أغلفة وZ = ${e.z}. ${Z1R[Z1.r].g?'تذكّر: عدد الأغلفة يحدد الحجم.':'الأغلفة متساوية هنا، فانظر إلى الشحنة النووية.'} جرّب مكانًا آخر.`}
+function z1hint(){Z1.hint=Math.min(3,Z1.hint+1);const R=Z1R[Z1.r];const first=Z1.slots.findIndex(x=>!x);
+ const T=[0,R.g?'في المجموعة الواحدة: كلما نزلنا للأسفل زاد عدد الأغلفة (رقم الدورة).':'في الدورة الواحدة عدد الأغلفة ثابت؛ فانظر إلى الشحنة النووية (Z).',R.g?'أظهرتُ عدد الأغلفة تحت كل ذرة.':'أظهرتُ الشحنة النووية Z تحت كل ذرة. هل يزيد Z أم يقل مع الحجم؟',`ابدأ بالخانة رقم ${first+1}: الذرة المناسبة هي <b>${Z1.ans[first]}</b>.`];
+ z1draw();fb('💡 '+T[Z1.hint],'hint');say(T[Z1.hint])}
+function z1done(){Z1.done=true;sfx('win');addXP(20);const R=Z1R[Z1.r],last=Z1.r==3;
+ fb(`🎉 أحسنت! ${R.note}<br>${Z1.wrong?'محاولات خاطئة: '+Z1.wrong:'⭐ بلا أخطاء!'}<div class="row"><button class="btn" id="nx">${last?'إنهاء المنطقة ✔':'الجولة التالية ›'}</button></div>`,'good');
+ $('#nx').onclick=()=>last?finish('z1',40,'استعدت غابة الذرات!','تعلّمت أن نصف القطر <b>يزداد نزولًا في المجموعة</b> و<b>يقل عبر الدورة</b>. تُفتح الآن «محطة الطاقة».'):z1s(Z1.r+1)}
+
+/* ================= المنطقة 2: محطة الطاقة ================= */
+const Z2M=[
+ {t:'الدورة 3',task:'أضئ <b>3 مصابيح</b> بميزانية طاقة محدودة. كل مصباح يحتاج نزع إلكترون واحد من ذرة مختلفة من الدورة 3.',pool:['Na','Mg','Al','Si','P','S','Cl','Ar'],lamps:3,budget:1900,
+  note:'لاحظ الاستثناءين: Al أقل من Mg، وS أقل من P. الاتجاه العام يزداد نحو اليمين لكن الأغلفة الفرعية الممتلئة أو نصف الممتلئة تُحدث قفزات.'},
+ {t:'المجموعة 1 مقابل F',task:'أضئ <b>3 مصابيح</b> بميزانية أصغر! اختر ذرات يسهل نزع إلكترونها.',pool:['Li','Na','K','Rb','Cs','F'],lamps:3,budget:1250,
+  note:'نزولًا في المجموعة 1 تقل طاقة التأين: Cs ثم Rb ثم K أسهل. أما F فهي في أقصى اليمين وبشحنة فعّالة كبيرة فتحتاج طاقة ضخمة.'}];
+let Z2;
+function z2(){z2s(0)}
+function z2s(m){const M=Z2M[m];Z2={m,left:M.budget,lamps:Array(M.lamps).fill(null),used:{},hint:0,over:false};hintFn=z2hint;z2draw();say('اسحب الإلكترون 🟡 من الذرة إلى مصباح. ستعرف التكلفة بعد النزع، فاختر بحكمة! (اضغط الذرة للمعلومات)')}
+function z2draw(){const M=Z2M[Z2.m];
+ app.innerHTML=`<div class="zhead"><span>⚡ محطة الطاقة الإلكترونية</span><span class="pill">المهمة ${Z2.m+1}/2</span></div>
+ <div class="card"><p class="task">${M.task}</p>
+ <div class="bat"><i style="width:${Z2.left/M.budget*100}%"></i><span>الطاقة المتبقية ${Z2.left} / ${M.budget} kJ/mol</span></div>
+ <div class="lamps">${Z2.lamps.map((l,i)=>`<div class="lamp drop ${l?'on':''}" data-i="${i}">${l?'💡':'🔌'}<small>${l?l.s+' · '+l.c:'أسقط الإلكترون هنا'}</small></div>`).join('')}</div>
+ <div class="agrid">${M.pool.map(s=>{const e=E[s];return Z2.used[s]?`<div class="acard used"><div class="nuc" style="--h:${hue(e)}">${s}⁺</div>${e.n}<br><small>تأيّنت</small></div>`:`<div class="acard" data-s="${s}"><div class="nuc" style="--h:${hue(e)}">${s}<span class="orbit"><i class="el" data-s="${s}"></i></span></div>${e.n}</div>`}).join('')}</div>
+ <div id="fb" class="fb">اسحب إلكترونًا إلى مصباح، أو اضغطه لإضاءة أول مصباح فارغ.</div>
+ <div class="row"><button class="btn ghost" id="hb">💡 تلميح</button><button class="btn ghost" id="rs">↺ إعادة المهمة</button></div></div>`;
+ $$('.el').forEach(el=>drag(el,el.dataset.s,{onDrop:(s,t)=>{if(t.classList.contains('lamp'))z2use(s,+t.dataset.i)},onTap:s=>z2use(s,Z2.lamps.findIndex(x=>!x))}));
+ $$('.acard[data-s]').forEach(c=>c.onclick=ev=>{if(ev.target.closest('.el'))return;const e=E[c.dataset.s];fb(`🔎 <b>${e.n}</b>: Z=${e.z} · المجموعة ${e.g} · الدورة ${e.p} (${e.p} أغلفة) · نصف القطر ${e.r} pm`,'hint')});
+ $('#hb').onclick=z2hint;$('#rs').onclick=()=>z2s(Z2.m)}
+function z2use(s,i){
+ if(Z2.over||i<0||Z2.used[s])return;const M=Z2M[Z2.m],e=E[s];
+ if(Z2.lamps[i]){i=Z2.lamps.findIndex(x=>!x);if(i<0)return}
+ if(e.ie>Z2.left){sfx('bad');fb(`⛔ نزع إلكترون من <b>${e.n}</b> يحتاج <b>${e.ie}</b> kJ/mol لكن المتبقي <b>${Z2.left}</b> فقط. عاد الإلكترون إلى الذرة. جرّب عنصرًا يسهل نزع إلكترونه.`,'bad');shake($('.bat'));return}
+ Z2.left-=e.ie;Z2.lamps[i]={s,c:e.ie};Z2.used[s]=1;sfx('zap');z2draw();
+ const why=IEX[s]||(e.g==1?'نصف قطر كبير وشحنة فعّالة صغيرة ⇒ الإلكترون الخارجي بعيد ويسهل نزعه.':e.g==18?'غلاف خارجي ممتلئ وشحنة فعّالة كبيرة ⇒ يصعب النزع جدًا.':e.s=='F'?'أصغر ذرات الدورة 2 وبشحنة فعّالة كبيرة ⇒ الإلكترون ملتصق بالنواة.':'الشحنة النووية الفعّالة تزداد عبر الدورة ⇒ الإلكترون أشد ارتباطًا.');
+ fb(`💡 <b>${e.n}</b>: ${e.ie} kJ/mol.<br>${why}`,'good');
+ if(Z2.lamps.every(Boolean)){z2win();return}
+ const need=Z2.lamps.filter(x=>!x).length,rest=M.pool.filter(x=>!Z2.used[x]).map(x=>E[x].ie).sort((a,b)=>a-b).slice(0,need).reduce((a,b)=>a+b,0);
+ if(rest>Z2.left){Z2.over=true;fb(`😬 لم تعد الطاقة المتبقية (${Z2.left}) كافية لإضاءة باقي المصابيح. تعلّمنا من ذلك! أعد المحاولة بخيارات أذكى.<div class="row"><button class="btn" id="rt">↺ أعد المحاولة</button></div>`,'warn');$('#rt').onclick=()=>z2s(Z2.m);sfx('bad')}}
+function z2win(){const M=Z2M[Z2.m],last=Z2.m==1;sfx('win');addXP(25);
+ const items=M.pool.map(s=>[s,E[s].ie,E[s].ie]);
+ fb(`🎉 أضأت كل المصابيح! طاقة التأين الأولى للعناصر:${bars(items,{max:1700,hl:Z2.m==0?['Al','S']:[]})}<small>${M.note}</small><div class="row"><button class="btn" id="nx">${last?'إنهاء المنطقة ✔':'المهمة التالية ›'}</button></div>`,'good');
+ $('#nx').onclick=()=>last?finish('z2',40,'أُعيدت الطاقة!','تعلّمت أن طاقة التأين <b>تزداد عبر الدورة</b> (مع استثناءات) و<b>تقل نزولًا في المجموعة</b>. تُفتح الآن «مغناطيس الكهروسالبية».'):z2s(Z2.m+1)}
+function z2hint(){Z2.hint=Math.min(3,(Z2.hint||0)+1);const M=Z2M[Z2.m];
+ const best=M.pool.filter(x=>!Z2.used[x]).sort((a,b)=>E[a].ie-E[b].ie)[0];
+ const T=[0,'في الدورة الواحدة تزداد الشحنة النووية فيزداد التصاق الإلكتروني الخارجي. وفي المجموعة، الإلكترون الأبعد أسهل نزعًا.',M.t.startsWith('الدورة')?'ابحث عن العناصر في أقصى اليسار، لكن انتبه: Mg ممتلئ الغلاف 3s فقد يكون Al أرخص منه!':'أقل طاقة في الأسفل واليسار: ذرات المجموعة 1 الكبيرة. وأيّها الأكبر؟',`الأرخص بين المتبقية هو <b>${best}</b>.`];
+ fb('💡 '+T[Z2.hint],'hint');say(T[Z2.hint])}
+
+/* ================= المنطقة 3: مغناطيس الكهروسالبية ================= */
+const TOK=['H','C','N','O','F','Na','Cl','K','Mg','S','Cs','Ne'];
+const Z3M=[
+ {t:'كوّن رابطة <b>تساهمية غير قطبية</b> بين عنصرين <b>مختلفين</b> (ΔEN أقل من 0.4).',ok:(A,B,d)=>A.s!==B.s&&d<.4,tip:'العناصر المتقاربة في الكهروسالبية تتشارك الإلكترونات بالتساوي تقريبًا. جرّب C مع عنصر قريب منه.'},
+ {t:'كوّن رابطة <b>قطبية</b> تتجه فيها الإلكترونات نحو <b>الأكسجين O</b> (ΔEN بين 0.4 و1.7).',ok:(A,B,d)=>d>=.4&&d<=1.7&&(A.s=='O'||B.s=='O')&&Math.max(A.en,B.en)==3.44,tip:'اختر عنصرًا كهروسالبيته أقل بقدر متوسط من O، لا قريبًا جدًا ولا بعيدًا جدًا.'},
+ {t:'كوّن رابطة <b>أيونية</b>: ΔEN أكبر من 1.7.',ok:(A,B,d)=>d>1.7,tip:'اجمع فلزًا شديد الفلزية مع لا فلز شديد الكهروسالبية.'},
+ {t:'أقصى سحب! اجعل ΔEN <b>3.0 أو أكثر</b>.',ok:(A,B,d)=>d>=3,tip:'الأعلى كهروسالبية في الجدول F، والأقل بين خياراتك في أسفل المجموعة 1.'}];
+let Z3;
+function z3(){z3s(0)}
+function z3s(m){Z3={m,at:[null,null],hand:null,ok:false,hint:0};hintFn=z3hint;z3draw();say('اسحب عنصرين إلى الخانتين وشاهد سحابة الإلكترونات تتحرك نحو الذرة الأعلى كهروسالبية 🧲')}
+function z3draw(){const M=Z3M[Z3.m];
+ app.innerHTML=`<div class="zhead"><span>🧲 مغناطيس الكهروسالبية</span><span class="pill">الهدف ${Z3.m+1}/4</span></div>
+ <div class="card"><p class="task">🎯 ${M.t}</p>
+ <div class="socks"><div class="sock drop" data-i="0"></div><div class="sock drop" data-i="1"></div></div>
+ ${bondHTML()}<div class="escale"><i class="mk a"></i><i class="mk b"></i><span style="left:0">0</span><span style="left:50%">2</span><span style="right:0">4</span></div>
+ <div class="binfo" id="bi" style="margin-top:14px">ضع ذرتين لتكوين الرابطة.</div>
+ <p class="mini" style="margin-top:8px">صندوق العناصر — اسحب إلى الخانتين أو اضغط عنصرًا ثم الخانة:</p>
+ <div class="bench">${TOK.map(s=>`<div class="tok ${Z3.hand==s?'sel':''}" data-s="${s}" style="--h:${hue(E[s])}"><b>${s}</b><small>${E[s].n}</small></div>`).join('')}</div>
+ <div id="fb" class="fb">ابدأ بوضع عنصرين.</div>
+ <div class="row"><button class="btn ghost" id="hb">💡 تلميح</button><button class="btn ghost" id="rs">↺ مسح الخانتين</button></div></div>`;
+ $$('.tok').forEach(t=>drag(t,t.dataset.s,{onDrop:(s,x)=>{if(x.classList.contains('sock'))z3set(+x.dataset.i,s)},onTap:s=>{Z3.hand=Z3.hand==s?null:s;$$('.tok').forEach(q=>q.classList.toggle('sel',q.dataset.s==Z3.hand))}}));
+ $$('.sock').forEach(s=>s.onclick=ev=>{if(ev.target.dataset.x!=null){Z3.at[+ev.target.dataset.x]=null;z3upd();return}if(Z3.hand){z3set(+s.dataset.i,Z3.hand);Z3.hand=null;$$('.tok').forEach(q=>q.classList.remove('sel'))}});
+ $('#hb').onclick=z3hint;$('#rs').onclick=()=>{Z3.at=[null,null];z3upd()};z3upd()}
+function z3set(i,s){Z3.at[i]=s;sfx('drop');z3upd()}
+function z3upd(){const M=Z3M[Z3.m];
+ $$('.sock').forEach((x,i)=>{const s=Z3.at[i];x.innerHTML=s?`<button class="x" data-x="${i}">✕</button><b>${s}</b><small>${E[s].n}</small>`:`<small>الذرة ${i+1}</small>`});
+ const A=Z3.at[0]&&E[Z3.at[0]],B=Z3.at[1]&&E[Z3.at[1]],r=bondUpd(app,A,B),bi=$('#bi');
+ if(A&&B&&!r){const ng=[A,B].find(x=>x.en==null);bi.innerHTML=`🚫 <b>${ng.n}</b> غاز نبيل: غلافه ممتلئ فلا يكوّن روابط عادةً، لذلك لا تُعطى له كهروسالبية. (لاحظ: طاقة التأين له عالية جدًا، لكنها صفة لذرة معزولة وليست لذرة في رابطة!)`;fb('جرّب عنصرًا آخر.','warn');return}
+ if(!r){bi.textContent=A||B?'ضع الذرة الثانية…':'ضع ذرتين لتكوين الرابطة.';return}
+ bi.innerHTML=`ΔEN = <b>${r.d.toFixed(2)}</b> ⇒ <b>${r.t}</b><br>الإلكترونات أقرب إلى <b>${r.hi.n}</b>.<br><small>الكهروسالبية (في الرابطة): ${A.s} = ${A.en} ، ${B.s} = ${B.en}<br>طاقة التأين (ذرة معزولة): ${A.s} = ${A.ie} ، ${B.s} = ${B.ie} kJ/mol ← خاصيتان مختلفتان!</small>`;
+ if(M.ok(A,B,r.d)&&!Z3.ok){Z3.ok=true;sfx('win');addXP(15);const last=Z3.m==3;
+  fb(`✅ ممتاز! <b>${A.s}–${B.s}</b>: ΔEN = ${r.d.toFixed(2)} ⇒ ${r.t}. الإلكترونات تميل نحو ${r.hi.n}.<div class="row"><button class="btn" id="nx">${last?'إنهاء المنطقة ✔':'الهدف التالي ›'}</button></div>`,'good');
+  $('#nx').onclick=()=>last?finish('z3',40,'اشتغل المغناطيس!','تعلّمت أن الكهروسالبية <b>تزداد عبر الدورة</b> و<b>تقل نزولًا في المجموعة</b>، وأن فرق الكهروسالبية يحدد نوع الرابطة. وهي تختلف عن طاقة التأين. تُفتح الآن «مختبر الإلكترونات الغامضة».'):z3s(Z3.m+1)}
+ else if(!Z3.ok)fb(`ΔEN = ${r.d.toFixed(2)} — ${r.t}. ليس هذا هو الهدف بعد، غيّر أحد العنصرين وراقب السحابة. 🔄`,'warn')}
+function z3hint(){Z3.hint++;const t=Z3M[Z3.m].tip;fb('💡 '+t,'hint');say(t)}
+
+/* ================= المنطقة 4: مختبر الإلكترونات الغامضة ================= */
+const SAM=['Cl','F','S','O','P','Li','Na','N','Be','Mg','Ne','Ar'];
+const ECL=s=>{const a=E[s].ea;return a<=-100?'big':a<0?'small':'none'};
+const BINN={big:'تُطلق طاقة كبيرة (≥ 100)',small:'تُطلق طاقة قليلة (أقل من 100)',none:'لا تميل لاكتساب إلكترون (≈ 0 أو موجبة)'};
+const orbH=e=>{const z=e.z,s2=Math.min(2,z-2),p=Math.max(0,z-4),bx=n=>`<span class="ob">${n==2?'↑↓':n==1?'↑':''}</span>`,pb=[0,1,2].map(i=>(p>i?1:0)+(p>3+i?1:0));return`<div class="orbs"><div><small>1s</small><br>${bx(2)}</div><div><small>2s</small><br>${bx(s2)}</div><div><small>2p</small><br>${pb.map(bx).join('')}</div></div>`};
+const Z4Q=[
+ {title:'الدورة 2: لماذا الانخفاض عند Be وN؟',items:['Li','Be','B','C','N','O','F'],q:'ما أفضل تفسير للانخفاض الواضح في Be وN؟',
+  o:[['خطأ في القياس ولا علاقة له بترتيب الإلكترونات.',0,'القياسات متكررة ومنطقية؛ فالقفزات ترتبط بالبنية الإلكترونية لا بالخطأ.'],['Be غلافه 2s ممتلئ وN غلافه 2p نصف ممتلئ، وكلاهما مستقر نسبيًا فلا يرحّبان بإلكترون إضافي.',1,'صحيح! الأغلفة الفرعية الممتلئة ونصف الممتلئة تعطي استقرارًا خاصًا.'],['لأن Be وN أكبر حجمًا من جيرانهما.',0,'الحجم يتناقص بانتظام عبر الدورة، فلا يفسر القفزات. انظر مخطط المدارات.']]},
+ {title:'المجموعة 17: لماذا Cl أكبر من F؟',items:['F','Cl','Br','I'],q:'ما التفسير الأنسب لكون ألفة Cl أكبر من F؟',
+  o:[['F أقل كهروسالبية من Cl.',0,'بل F أعلى كهروسالبية (3.98 مقابل 3.16).'],['F صغيرة جدًا، فيتنافر الإلكترون الجديد مع إلكترونات كثيفة في حيّز ضيق فتُطلق طاقة أقل من المتوقع.',1,'صحيح! هذا استثناء مشهور للاتجاه العام.'],['F لا تميل لاكتساب الإلكترونات.',0,'F تُطلق 328 kJ/mol وهي من أعلى القيم.']]}];
+let Z4;
+function z4(){Z4={ph:1,T:{},bins:{big:[],small:[],none:[]},pool:rnd(SAM),q:0,ev:null,ans:{},opts:Z4Q.map(q=>rnd(q.o))};hintFn=z4hint;z4draw();say('اسحب الإلكترون إلى الأنابيب (أو اضغطها) وراقب الطاقة 🔬')}
+function z4draw(){
+ const ph=Z4.ph,n=Object.keys(Z4.T).length;let body='';
+ if(ph==1)body=`<p class="task">🔬 <b>التجربة:</b> أسقط إلكترونًا على كل عينة (أو اضغط الأنبوب) ولاحظ هل تُطلق طاقة أم تمتصها. اختبرت <b>${n}/12</b>.</p>
+ <div class="row"><div class="esrc" id="esrc"><i class="el free"></i> إلكترون e⁻</div><div class="gauge" id="gauge"><small>مقياس الطاقة</small><div class="gl"><i style="width:0"></i></div><div id="gt" class="mini">اختر عينة…</div></div></div>
+ <div class="beakers">${SAM.map(s=>{const e=E[s],t=Z4.T[s]!=null;return`<div class="beaker drop ${t?(e.ea<0?'rel':'rej'):''}" data-s="${s}">🧪 ${s}<small>${t?(e.ea<0?'−'+(-e.ea):'+'+e.ea):e.n}</small></div>`}).join('')}</div>
+ <div class="row"><button class="btn" id="nx" ${n<12?'disabled':''}>التصنيف ›</button></div>`;
+ if(ph==2)body=`<p class="task">🗂 <b>صنّف</b> نتائجك: اسحب كل عنصر إلى المجموعة المناسبة (أو اضغطه ثم اضغط المجموعة).</p>
+ <div class="bench" id="bp">${Z4.pool.map(s=>`<div class="tok ${Z4.hand==s?'sel':''}" data-s="${s}" style="--h:${hue(E[s])}"><b>${s}</b><small>${E[s].ea<0?'−'+(-E[s].ea):'+'+E[s].ea}</small></div>`).join('')}</div>
+ <div class="bins">${['big','small','none'].map(b=>`<div class="bin drop" data-b="${b}">${BINN[b]}<br>${Z4.bins[b].map(s=>`<div class="tok" style="--h:${hue(E[s])}"><b>${s}</b></div>`).join('')}</div>`).join('')}</div>`;
+ if(ph==3){const Q=Z4Q[Z4.q],ev=Z4.ev;
+  const items=Q.items.map(s=>[s,Math.max(0,-E[s].ea),E[s].ea<0?'−'+(-E[s].ea):'+'+E[s].ea]);
+  body=`<p class="task">📊 <b>${Q.title}</b><br><span class="mini">اضغط أعمدة المخطط لرؤية الدليل (الطاقة المُطلقة kJ/mol).</span></p>${bars(items,{max:360,on:ev})}
+  <div class="info" id="evd">${ev?evHTML(ev):'اضغط أحد الأعمدة لعرض التفاصيل.'}</div>
+  <p class="task" style="margin-top:12px"><b>${Q.q}</b></p>${Z4.opts[Z4.q].map((o,i)=>`<button class="opt" data-o="${i}">${o[0]}</button>`).join('')}`}
+ app.innerHTML=`<div class="zhead"><span>🔬 مختبر الإلكترونات الغامضة</span><span class="pill">المرحلة ${ph}/3</span></div><div class="card">${body}<div id="fb" class="fb">${ph==1?'ابدأ التجربة.':ph==2?'صنّف العناصر حسب الطاقة المُقاسة.':'اقرأ الدليل ثم اختر التفسير.'}</div><div class="row"><button class="btn ghost" id="hb">💡 تلميح</button></div></div>`;
+ $('#hb').onclick=z4hint;
+ if(ph==1){const act=()=>{const s=SAM.find(x=>Z4.T[x]==null);if(s)z4test(s)};
+  drag($('#esrc'),null,{onDrop:(d,t)=>{if(t.dataset.s)z4test(t.dataset.s)},onTap:act});
+  $$('.beaker').forEach(b=>b.onclick=()=>z4test(b.dataset.s));
+  $('#nx').onclick=()=>{Z4.ph=2;Z4.hand=null;z4draw()}}
+ if(ph==2){$$('#bp .tok').forEach(t=>drag(t,t.dataset.s,{onDrop:(s,x)=>{if(x.dataset.b)z4bin(s,x.dataset.b)},onTap:s=>{Z4.hand=Z4.hand==s?null:s;z4draw()}}));
+  $$('.bin').forEach(b=>b.onclick=()=>{if(Z4.hand)z4bin(Z4.hand,b.dataset.b)})}
+ if(ph==3){$$('.bar').forEach(b=>b.onclick=()=>{Z4.ev=b.dataset.k;z4draw()});$$('.opt').forEach(b=>b.onclick=()=>z4ans(+b.dataset.o,b))}}
+function z4test(s){if(Z4.T[s]!=null)return;const e=E[s];Z4.T[s]=e.ea;sfx(e.ea<0?'good':'bad');z4draw();
+ const g=$('#gauge');const pct=e.ea<0?Math.min(100,-e.ea/350*100):100;
+ g.innerHTML=`<small>مقياس الطاقة — ${e.n}</small><div class="gl"><i style="width:${pct}%;background:${e.ea<0?'linear-gradient(90deg,var(--good),var(--warn))':'var(--bad)'}"></i></div><div class="mini">${e.ea<0?'✨ تُطلق <b>'+(-e.ea)+'</b> kJ/mol':'⛔ لا تكتسبه بسهولة (≈ 0 أو +'+e.ea+')'}</div>`;
+ const n=Object.keys(Z4.T).length;if(n==12){fb('✅ اختبرت كل العينات! لاحظ أن النتائج ليست متدرجة بانتظام. انتقل للتصنيف.','good');addXP(10)}
+ else fb(`${e.ea<0?'🟢':'🔴'} <b>${e.n}</b>: ${e.ea<0?'أطلقت '+(-e.ea)+' kJ/mol':'رفضت الإلكترون'}. ${EAX[s]||''}`,e.ea<0?'good':'bad')}
+function z4bin(s,b){
+ if(ECL(s)===b){Z4.bins[b].push(s);Z4.pool=Z4.pool.filter(x=>x!==s);Z4.hand=null;sfx('good');addXP(5);z4draw();fb(`✅ ${E[s].n}: ${E[s].ea<0?'−'+(-E[s].ea):'+'+E[s].ea} kJ/mol. ${EAX[s]||''}`,'good');
+  if(!Z4.pool.length){fb('🎉 صنّفت الكل! بدا أن بعض العناصر المتوقعة غابت عن الأعلى. لنعرف السبب…<div class="row"><button class="btn" id="n3">اكتشف التفسير ›</button></div>','good');$('#n3').onclick=()=>{Z4.ph=3;z4draw()}}}
+ else{sfx('bad');Z4.hand=null;fb(`❌ <b>${E[s].n}</b>: قيمتها ${E[s].ea<0?'−'+(-E[s].ea):'+'+E[s].ea} kJ/mol، فهي لا تنتمي إلى «${BINN[b]}». قارن بالقيم المعروضة.`,'bad');shake($(`.bin[data-b="${b}"]`))}}
+function evHTML(s){const e=E[s];if(e.z>=3&&e.z<=10)return`<b>${e.n} (${s})</b> — ${e.ea<0?'تُطلق '+(-e.ea):'ألفة ≈ 0/موجبة (+'+e.ea+')'} kJ/mol<br>نصف القطر ${e.r} pm<br>توزيع الإلكترونات:${orbH(e)}${EAX[s]?'<small>'+EAX[s]+'</small>':''}`;
+ return`<b>${e.n} (${s})</b> — تُطلق ${-e.ea} kJ/mol · نصف القطر ${e.r} pm · ${e.p} أغلفة<br>${EAX[s]?'<small>'+EAX[s]+'</small>':'<small>ذرة أكبر ⇒ تنافر أقل لكن جذب أضعف، فتقل الطاقة نزولًا.</small>'}`}
+function z4ans(i,btn){const Q=Z4.opts[Z4.q][i];if(Q[1]){sfx('win');addXP(20);btn.classList.add('ok');$$('.opt').forEach(b=>b.disabled=true);const last=Z4.q==1;
+  fb(`✅ ${Q[2]}<div class="row"><button class="btn" id="nx">${last?'إنهاء المنطقة ✔':'السؤال التالي ›'}</button></div>`,'good');
+  $('#nx').onclick=()=>{if(last)finish('z4',40,'كشفت أسرار المختبر!','تعلّمت أن الألفة الإلكترونية <b>تميل للزيادة نحو اليمين وللأعلى</b> لكن لها <b>استثناءات</b> بسبب الأغلفة الفرعية والتنافر. تُفتح الآن «سباق استعادة العناصر».');else{Z4.q=1;Z4.ev=null;z4draw()}}}
+ else{sfx('bad');btn.classList.add('no');fb('❌ '+Q[2],'bad')}}
+function z4hint(){const t=Z4.ph==1?'اختبر جميع العينات بالتتابع، ولا تتوقع نتائج متدرجة! قارن بين N وO، وبين Be وB.':Z4.ph==2?'القيمة السالبة تعني إطلاق طاقة. العتبة بين «كبيرة» و«قليلة» عند −100 تقريبًا.':'انظر مخطط المدارات: هل الغلاف الفرعي ممتلئ أو نصف ممتلئ؟ وفي المجموعة 17 انظر إلى حجم الذرة.';fb('💡 '+t,'hint');say(t)}
+
+/* ================= المنطقة 5: سباق استعادة العناصر ================= */
+const Z5S={Cs:[0,0],K:[5,0],Na:[2,1],Mg:[7,2],Cl:[4,2],Al:[3,3],Si:[0,4],S:[6,4]};
+const Z5R=[[4,1],[1,2],[5,3],[3,4]];
+const Z5T={g:{p:[1,5],ic:'⚡',n:'مولّد الطاقة',need:'يحتاج <b>أقوى فلز</b> بين عيّناتك، أي ذو <b>أعلى صفة فلزية</b>.',ok:s=>s==Z5top(),msg:'Cs في أسفل المجموعة 1 (أقصى اليسار والأسفل بين العيّنات) فهو أكثرها فلزية: يفقد إلكترونه بسهولة فيولّد الطاقة.'},
+ h:{p:[4,5],ic:'🧠',n:'رقاقة التحكم',need:'تحتاج مادة <b>شبه فلز</b> (شبه موصلة) على الحد الفاصل في الجدول.',ok:s=>kind(E[s])=='شبه فلز',msg:'Si شبه فلز: يقع على حدّ «السلّم» بين الفلزات واللافلزات، فهو شبه موصل مناسب للرقائق.'},
+ i:{p:[7,5],ic:'🧱',n:'غلاف العزل',need:'يحتاج <b>لا فلزًا صلبًا</b> لا يوصل الكهرباء.',ok:s=>s=='S',msg:'S لا فلز صلب هش وعازل. أما Cl فلا فلز لكنه غاز، فلا يصلح لغلاف صلب.'}};
+const Z5ORD=['Cl','S','Si','Al','Mg','Na','K','Cs'];
+function Z5top(){const inv=Z5.inv;return[...inv].sort((a,b)=>val('mc',E[b])-val('mc',E[a]))[0]}
+let Z5;
+function z5(){Z5={x:3,y:2,inv:[],tasks:{},seq:[],busy:false,at:null,hint:0};hintFn=z5hint;z5draw();say('قُد الروبوت 🤖 بالأسهم أو اضغط على المربعات لتجمع كل العيّنات الثماني.')}
+function z5live(){return Object.keys(Z5.tasks).length+(Z5.seq.length==8?1:0)}
+function z5draw(){
+ app.innerHTML=`<div class="zhead"><span>🏁 سباق استعادة العناصر</span><span class="pill" id="cnt">العيّنات ${Z5.inv.length}/8</span></div>
+ <div class="card"><div class="gwrap" id="gw" style="filter:saturate(${.15+z5live()*.21}) brightness(${.55+z5live()*.11})"><div class="tiles" id="tiles"></div><div id="robot">🤖</div></div>
+ <div class="row" style="justify-content:space-between"><div class="dpad"><button data-d="U">▲</button><button data-d="L">◀</button><button data-d="R">▶</button><button data-d="D">▼</button></div><div style="flex:1;min-width:150px"><div class="mini">🎒 حقيبتك:</div><div class="inv" id="inv"></div></div></div>
+ <div id="fb" class="fb">اجمع كل العيّنات ثم اذهب إلى المحطات ⚡🧠🧱 في الصف السفلي.</div><div id="tp"></div>
+ <div class="row"><button class="btn ghost" id="hb">💡 تلميح</button></div></div>`;
+ z5tiles();z5robot();z5inv();
+ $$('.dpad button').forEach(b=>b.onclick=()=>z5step(b.dataset.d));$('#hb').onclick=z5hint;
+ if(Z5.seq.length||Z5.inv.length==8&&Object.keys(Z5.tasks).length==3)z5rank()}
+function z5tiles(){let h='';for(let y=0;y<6;y++)for(let x=0;x<8;x++){const rock=Z5R.some(r=>r[0]==x&&r[1]==y),s=Object.keys(Z5S).find(k=>Z5S[k][0]==x&&Z5S[k][1]==y),st=Object.keys(Z5T).find(k=>Z5T[k].p[0]==x&&Z5T[k].p[1]==y);
+ let c='';if(rock)c='⛰️';else if(s&&!Z5.inv.includes(s))c=`<span class="smp" style="--h:${hue(E[s])}">${s}</span>`;else if(st)c=`<span class="stn ${Z5.tasks[st]?'lit':''}">${Z5.tasks[st]?'✨':Z5T[st].ic}</span>`;
+ h+=`<div class="tile ${rock?'rock':''}" data-x="${x}" data-y="${y}">${c}</div>`}
+ $('#tiles').innerHTML=h;$$('.tile').forEach(t=>t.onclick=()=>z5go(+t.dataset.x,+t.dataset.y))}
+function z5robot(){const r=$('#robot');r.style.left=Z5.x*12.5+'%';r.style.top=Z5.y*16.6667+'%'}
+function z5inv(){const iv=$('#inv');iv.innerHTML=Z5.inv.map(s=>`<div class="tok" data-s="${s}" style="--h:${hue(E[s])}"><b>${s}</b></div>`).join('')||'<span class="mini">فارغة</span>';$('#cnt').textContent=`العيّنات ${Z5.inv.length}/8`;
+ $$('#inv .tok').forEach(t=>drag(t,t.dataset.s,{onDrop:(s,x)=>{if(x.id=='tslot'&&Z5.at)z5task(s);else if(x.id=='seq'&&Z5.seq.length<8&&Z5.inv.length==8&&Object.keys(Z5.tasks).length==3)z5pick(s)},onTap:s=>{if(Z5.at)z5task(s);else if(Object.keys(Z5.tasks).length==3)z5pick(s)}}))}
+function z5step(d){if(Z5.busy)return;const dx={L:-1,R:1}[d]||0,dy={U:-1,D:1}[d]||0,nx=Z5.x+dx,ny=Z5.y+dy;
+ if(nx<0||ny<0||nx>7||ny>5||Z5R.some(r=>r[0]==nx&&r[1]==ny)){shake($('#robot'));return}
+ Z5.x=nx;Z5.y=ny;z5robot();sfx('drop');z5land()}
+function z5land(){const s=Object.keys(Z5S).find(k=>Z5S[k][0]==Z5.x&&Z5S[k][1]==Z5.y);
+ if(s&&!Z5.inv.includes(s)){Z5.inv.push(s);addXP(5);sfx('good');z5tiles();z5inv();const e=E[s];fb(`🧭 جمعت <b>${e.n} (${s})</b>. موقعه: المجموعة ${e.g} · الدورة ${e.p}. فكّر: ما معنى هذا الموقع لصفته الفلزية؟`,'good');
+  if(Z5.inv.length==8)say('جمعت كل العيّنات! اذهب إلى المحطات في الصف السفلي ⚡🧠🧱');}
+ const st=Object.keys(Z5T).find(k=>Z5T[k].p[0]==Z5.x&&Z5T[k].p[1]==Z5.y);
+ if(st){if(Z5.tasks[st]){fb('✨ هذه المحطة تعمل بالفعل.','good');return}
+  if(Z5.inv.length<8){fb(`🔒 اجمع كل العيّنات أولًا (${Z5.inv.length}/8).`,'warn');return}
+  Z5.at=st;const T=Z5T[st];$('#tp').innerHTML=`<div class="card" style="background:var(--panel2)"><h3>${T.ic} ${T.n}</h3><p>${T.need}</p><div class="tslot drop" id="tslot">اسحب عيّنة من حقيبتك إلى هنا (أو اضغطها)</div></div>`;$('#tp').scrollIntoView({behavior:'smooth',block:'nearest'});z5inv()}
+ else{Z5.at=null;$('#tp').innerHTML=Object.keys(Z5.tasks).length==3?'':''; if(Object.keys(Z5.tasks).length==3)z5rank()}}
+function z5go(x,y){if(Z5.busy)return;
+ const key=(a,b)=>a+','+b,blocked=(a,b)=>Z5R.some(r=>r[0]==a&&r[1]==b),q=[[Z5.x,Z5.y]],prev={[key(Z5.x,Z5.y)]:null};
+ while(q.length){const[a,b]=q.shift();if(a==x&&b==y)break;for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const na=a+dx,nb2=b+dy;if(na<0||nb2<0||na>7||nb2>5||blocked(na,nb2)||key(na,nb2)in prev)continue;prev[key(na,nb2)]=[a,b];q.push([na,nb2])}}
+ if(!(key(x,y)in prev)||(x==Z5.x&&y==Z5.y))return;
+ const path=[];let c=[x,y];while(c&&!(c[0]==Z5.x&&c[1]==Z5.y)){path.unshift(c);c=prev[key(c[0],c[1])]}
+ Z5.busy=true;let i=0;const iv=setInterval(()=>{if(cur!=='z5'||i>=path.length){clearInterval(iv);Z5.busy=false;return}Z5.x=path[i][0];Z5.y=path[i][1];i++;z5robot();if(i==path.length){clearInterval(iv);Z5.busy=false;z5land()}},150)}
+function z5task(s){const st=Z5.at,T=Z5T[st],e=E[s];
+ if(T.ok(s)){Z5.tasks[st]=1;sfx('win');addXP(20);Z5.at=null;$('#tp').innerHTML='';z5draw();fb(`✅ <b>${e.n}</b> مناسب! ${T.msg}<br>🌍 عاد جزء من الألوان والطاقة إلى العالم!`,'good');if(Object.keys(Z5.tasks).length==3){say('بقي ترتيب العناصر حسب الصفة الفلزية!');z5rank()}}
+ else{sfx('bad');shake($('#tslot'));const k=kind(e);fb(`❌ <b>${e.n}</b> (${k}) ليس مناسبًا هنا. ${st=='g'?'ابحث عن عنصر أكثر فلزية: صفة الفلزية تزداد نزولًا في المجموعة ونحو اليسار.':st=='h'?(k=='فلز'?'هذا فلز موصل جدًا، والرقاقة تحتاج شبه موصل على الحد الفاصل.':'هذا لا فلز لا يوصل. ابحث عن العنصر على حدّ السلّم.'):(k=='فلز'?'الفلزات توصل الكهرباء ولا تصلح للعزل.':k=='شبه فلز'?'شبه الفلز يوصل جزئيًا، والمطلوب عازل تمامًا.':'هذا لا فلز لكن الحالة الفيزيائية تهم: المطلوب مادة صلبة.')}`,'bad')}}
+function z5rank(){const done=Z5.seq.length==8&&!Z5.fin;
+ $('#tp').innerHTML=`<div class="card" style="background:var(--panel2)"><h3>🏆 لوحة الترتيب النهائية</h3><p class="task">رتّب العيّنات من <b>الأقل</b> إلى <b>الأكثر</b> صفةً فلزية: اضغط عيّنة من حقيبتك لتضعها في التسلسل بالترتيب.</p><div class="seq drop" id="seq">${Z5.seq.map(s=>`<div class="tok" style="--h:${hue(E[s])}"><b>${s}</b></div>`).join('')}</div></div>`;
+ $$('#inv .tok').forEach(t=>t.style.opacity=Z5.seq.includes(t.dataset.s)?.25:1);
+ if(done)z5fin()}
+function z5pick(s){if(Z5.seq.includes(s))return;const exp=Z5ORD[Z5.seq.length];
+ if(s===exp){Z5.seq.push(s);sfx('good');addXP(5);fb(`✅ ${E[s].n} في مكانه.`,'good');z5rank()}
+ else{sfx('bad');const e=E[s],x=E[exp];fb(`❌ ليس بعد. تذكّر: الصفة الفلزية <b>تقل نحو اليمين</b> في الدورة و<b>تزداد نزولًا</b> في المجموعة. ${e.s} (م${e.g}، د${e.p}). هل هو الأقل فلزية بين المتبقّي؟ 🤔`,'bad');shake($('#seq'))}}
+function z5fin(){Z5.fin=true;sfx('win');fb('🎉 رتّبت الكل: Cl ‹ S ‹ Si ‹ Al ‹ Mg ‹ Na ‹ K ‹ Cs. عاد العالم لألوانه!','good');
+ setTimeout(()=>finish('z5',40,'استعدت العناصر!','تعلّمت أن الصفة الفلزية <b>تقل عبر الدورة</b> و<b>تزداد نزولًا في المجموعة</b>، وأن أشباه الفلزات على الحد الفاصل. تُفتح الآن «المفاعل النهائي»!'),700)}
+function z5hint(){Z5.hint++;const t=Z5.inv.length<8?'اجمع العيّنات المتوهجة بالمرور عليها أو بالضغط على مربعها.':Object.keys(Z5.tasks).length<3?'الفلز الأقوى في أسفل المجموعة 1، وشبه الفلز على الحد الفاصل بين الفلزات واللافلزات، والعازل لا فلز صلب.':'الأقل فلزية في الأعلى واليمين (Cl)، والأكثر في الأسفل واليسار (Cs).';fb('💡 '+t,'hint');say(t)}
+document.addEventListener('keydown',e=>{if(cur!=='z5'||!Z5)return;const m={ArrowUp:'U',ArrowDown:'D',ArrowLeft:'L',ArrowRight:'R'}[e.key];if(m){e.preventDefault();z5step(m)}});
+
+/* ================= المفاعل النهائي ================= */
+const RX=[
+ {id:'a',ic:'🛡️',t:'الدرع',desc:'عنصر من <b>المجموعة 1</b> له <b>أكبر نصف قطر ذري</b>.',p:'r',sc:e=>e.g==1,mode:'max',scn:'المجموعة 1',tr:'نصف القطر يزداد نزولًا في المجموعة.'},
+ {id:'b',ic:'🔥',t:'المُشعل',desc:'عنصر من <b>المجموعة 2</b> يحتاج <b>أقل طاقة تأين</b> أولى.',p:'ie',sc:e=>e.g==2,mode:'min',scn:'المجموعة 2',tr:'طاقة التأين تقل نزولًا في المجموعة.'},
+ {id:'c',ic:'🧲',t:'المغناطيس',desc:'أعلى <b>كهروسالبية</b> في الجدول كله.',p:'en',sc:()=>true,mode:'max',scn:'الجدول كله',tr:'الكهروسالبية تزداد نحو اليمين وللأعلى.'},
+ {id:'d',ic:'🔋',t:'المستقبِل',desc:'من <b>الدورة 3</b>: يُطلق <b>أكبر طاقة</b> عند اكتساب إلكترون (أكبر ألفة إلكترونية).',p:'ea',sc:e=>e.p==3,mode:'max',scn:'الدورة 3',tr:'الألفة تزداد نحو اليمين، لكن احذر الغازات النبيلة.'},
+ {id:'e',ic:'🔌',t:'الموصل',desc:'أعلى <b>صفة فلزية</b> في <b>الدورة 4</b>.',p:'mc',sc:e=>e.p==4,mode:'max',scn:'الدورة 4',tr:'الصفة الفلزية تزداد نحو اليسار.'}];
+let Rx;
+function rx(){Rx={act:0,ok:{},bad:null,hint:0,fin:false};hintFn=rxhint;rxdraw();say('اسحب العناصر من الجدول إلى وحدات المفاعل. القرار الخاطئ يُربك المفاعل، لكن يمكنك المحاولة 🔁')}
+function rxdraw(){const n=Object.keys(Rx.ok).length,m=RX[Rx.act];
+ app.innerHTML=`<div class="zhead"><span>☢️ تحدي المفاعل النهائي</span><span class="pill">${n}/5 مستقر</span></div>
+ <div class="card"><div class="core ${n==5?'up':''}" id="core" style="--g:${n}"><div class="ring r1"></div><div class="ring r2"></div><div class="nuc2">${n==5?'✨':'⚠️'}</div></div>
+ <div class="mods">${RX.map((q,i)=>`<button class="mod drop ${Rx.ok[q.id]?'ok':''} ${Rx.act==i?'act':''} ${Rx.bad&&Rx.bad.id==q.id?'bad':''}" data-k="${i}"><span>${q.ic}</span><b>${Rx.ok[q.id]||(Rx.bad&&Rx.bad.id==q.id?Rx.bad.s:'؟')}</b>${q.t}</button>`).join('')}</div>
+ <div class="cond"><b>${m.ic} ${m.t}:</b> ${m.desc}</div></div>
+ <div class="card"><p class="mini">اسحب عنصرًا إلى وحدة، أو اضغط عنصرًا ليدخل الوحدة المحددة.</p><div class="scr"><div class="tw" style="padding:0">${ptHTML(null)}</div></div><div id="fb" class="fb">المفاعل غير مستقر. ابدأ بالوحدة المحددة 👆</div><div class="row"><button class="btn ghost" id="hb">💡 تلميح</button></div></div>`;
+ $$('.mod').forEach(b=>b.onclick=()=>{Rx.act=+b.dataset.k;Rx.bad=null;rxdraw()});
+ $$('.cell').forEach(c=>drag(c,c.dataset.s,{onDrop:(s,t)=>{if(t.dataset.k!=null)rxplace(s,+t.dataset.k)},onTap:s=>rxplace(s,Rx.act)}));
+ $('#hb').onclick=rxhint}
+function rxeval(m,e){
+ if(!m.sc(e))return{ok:false,msg:`<b>${e.n}</b> خارج نطاق الشرط (${m.scn}).`};
+ const pool=ELS.filter(x=>m.sc(x)&&val(m.p,x)!=null),best=pool.reduce((a,b)=>(m.mode=='max'?val(m.p,b)>val(m.p,a):val(m.p,b)<val(m.p,a))?b:a);
+ if(e.s==best.s)return{ok:true,best};
+ const v=PR[m.p].show(e),dir=best.p>e.p?'نحو الأسفل':best.p<e.p?'نحو الأعلى':best.g<e.g?'نحو اليسار':'نحو اليمين';
+ return{ok:false,msg:`<b>${e.n}</b>: ${PR[m.p].ar} = ${v}، لكن في النطاق عنصرًا ${m.mode=='max'?'أعلى':'أقل'} منه. ابحث ${dir} داخل ${m.scn}. ${m.tr}`}}
+function rxplace(s,i){if(Rx.fin)return;const m=RX[i],e=E[s];if(Rx.ok[m.id]){fb('هذه الوحدة مستقرة بالفعل ✅','warn');return}
+ const r=rxeval(m,e);Rx.act=i;
+ if(r.ok){Rx.ok[m.id]=s;Rx.bad=null;sfx('good');addXP(15);rxdraw();const n=Object.keys(Rx.ok).length;
+  fb(`✅ <b>${e.n}</b> مناسب! ${m.desc.replace(/<\/?b>/g,'')} (${PR[m.p].show(e)})`,'good');
+  if(n==5){Rx.fin=true;say('المفاعل يعمل! ✨');setTimeout(()=>{sfx('win');confetti();finish('rx',100,'أُعيد تشغيل المفاعل!','عادت الألوان والحركة إلى عالم العناصر بفضل فهمك للاتجاهات الدورية.');},1400)}}
+ else{Rx.bad={id:m.id,s};sfx('bad');rxdraw();shake($('#core'));fb('❌ '+r.msg+' <br><small>اختلّ استقرار المفاعل لحظيًا… حاول مجددًا.</small>','bad');setTimeout(()=>{if(cur==='rx'&&Rx.bad&&Rx.bad.s==s){Rx.bad=null;const mk=$(`.mod[data-k="${i}"]`);if(mk){mk.classList.remove('bad');mk.querySelector('b').textContent='؟'}}},2200)}}
+function rxhint(){Rx.hint++;const m=RX[Rx.act],pool=ELS.filter(x=>m.sc(x)&&PR[m.p].get(x)!=null),best=pool.reduce((a,b)=>(m.mode=='max'?val(m.p,b)>val(m.p,a):val(m.p,b)<val(m.p,a))?b:a);
+ const t=Rx.hint%3==1?m.tr:Rx.hint%3==2?`ابحث داخل: ${m.scn}.`:`الجواب في الدورة رقم ${best.p}.`;fb('💡 '+t,'hint');say(t)}
+
+/* ================= شاشة الفوز ================= */
+function win(){cur='win';hintFn=null;
+ app.innerHTML=`<div class="hero"><div style="font-size:4rem">🌟⚛️🌟</div><h1 style="font-size:2.2rem">عاد عالم العناصر!</h1><p>أعدت تشغيل مفاعل الجدول الدوري. هذه المهارات التي أتقنتها:</p>
+ <div class="card"><ul class="skills"><li>🌳 نصف القطر الذري يقل عبر الدورة ويزداد نزولًا في المجموعة</li><li>⚡ طاقة التأين تزداد عبر الدورة وتقل نزولًا، مع استثناءات</li><li>🧲 الكهروسالبية تحدد اتجاه الإلكترونات ونوع الرابطة</li><li>🔬 الألفة الإلكترونية لها استثناءات بسبب الأغلفة الفرعية والتنافر</li><li>🏁 الصفة الفلزية تقل عبر الدورة وتزداد نزولًا</li></ul><b>⭐ نقاط الخبرة: ${S.xp}</b></div>
+ <div class="row" style="justify-content:center"><button class="btn" id="mp">🗺 العودة للخريطة</button><button class="btn ghost" id="ag">↺ ابدأ من جديد</button></div></div>`;
+ $('#mp').onclick=()=>go('map');$('#ag').onclick=()=>{S={xp:0,done:{},lessonsDone:false,muted:S.muted};save();go('start')};confetti()}
+
+/* ================= التنقل والتشغيل ================= */
+const SCR={start,lessons:lessonsGo,map,z1,z2,z3,z4,z5,rx,win};
+function go(n){hintFn=null;closeModal();$('#bubble').classList.remove('on');cur=n;$('#top').classList.toggle('hidden',n==='start');window.scrollTo(0,0);SCR[n]();updTop()}
+$('#mascot').onclick=()=>{if(hintFn)hintFn();else say('اضغط «ابدأ المغامرة» أو اختر منطقة من الخريطة!')};
+$('#bMap').onclick=()=>{if(!S.lessonsDone)return toast('أكمل الدروس أولًا 📖');go('map')};
+$('#bLes').onclick=()=>{L.i=0;go('lessons')};
+$('#bSnd').onclick=()=>{S.muted=!S.muted;save();updTop()};
+(function(){const b=$('#bgat');for(let i=0;i<9;i++){const d=document.createElement('i'),s=40+Math.random()*120;d.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:-${Math.random()*14}s`;b.appendChild(d)}})();
+updTop();go('start');
+
+</script>
+</body>
+</html>
